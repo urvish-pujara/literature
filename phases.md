@@ -4,8 +4,8 @@ Living document. Update the **Current Status** line and check off todos as work 
 
 ## Current Status
 
-**Phase:** Phase 2 — Lobby + Transport (complete) ✓ — 30 server tests pass; REST + sockets working end-to-end across 6 clients; rate-limit + TTL + auth wired.
-**Next action:** Headless DOM-leak test — two real socket clients in a 6-player game; assert client B's payloads never contain client A's card identities.
+**Phase:** Phase 3 — Wire Engine Through Gateway (complete) ✓ — 37 server tests pass; DOM-leak invariant tested with 6 real socket clients across initial-deal and post-ask snapshots.
+**Next action:** Begin Phase 4 — `apps/web` skeleton (Vite + React + Tailwind + Router).
 
 ---
 
@@ -78,7 +78,7 @@ Goal: gameplay runs end-to-end on the server. Hand privacy enforced.
 - [x] `game:event` broadcast (public info only) with server `ts`
 - [x] Recent-events buffer per room for reconnect rehydration
 - [x] Reconnect path: socket reconnect → re-auth → fresh projection + recent events
-- [ ] **Headless DOM-leak test** — two Socket.IO clients in a room; assert client B's payloads never contain client A's card identities across a full game
+- [x] **Headless DOM-leak test** — two Socket.IO clients in a room; assert client B's payloads never contain client A's card identities across a full game
 
 **Exit criteria:** a scripted 3v3 game runs to completion via socket clients. The leak test is green.
 
