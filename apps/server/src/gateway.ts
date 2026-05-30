@@ -5,7 +5,6 @@ import {
   LobbySeatPayloadSchema,
   project,
   type GameEvent,
-  type Player,
   type Team,
 } from '@literature/shared';
 import { nanoid } from 'nanoid';
@@ -15,29 +14,11 @@ import type { Room } from './store.js';
 import { GameRoomService } from './game-room.js';
 import { emitGameEvent, emitProjectedState, type ServerGameEvent } from './emit.js';
 import { EventBuffer } from './event-buffer.js';
+import type { PresenceTracker } from './presence.js';
+import { projectLobby } from './lobby-projection.js';
 
-type LobbyView = {
-  roomId: string;
-  code: string;
-  variant: Room['variant'];
-  status: Room['status'];
-  players: Player[];
-  hostId: string;
-};
-
-function projectLobby(room: Room): LobbyView {
-  return {
-    roomId: room.id,
-    code: room.code,
-    variant: room.variant,
-    status: room.status,
-    players: room.players,
-    hostId: room.hostId,
-  };
-}
-
-function broadcastLobby(io: SocketIOServer, room: Room): void {
-  io.to(room.id).emit('lobby:update', projectLobby(room));
+function broadcastLobby(io: SocketIOServer, room: Room, presence: PresenceTracker): void {
+  io.to(room.id).emit('lobby:update', projectLobby(room, presence));
 }
 
 function stamp(event: GameEvent): ServerGameEvent {
@@ -45,7 +26,7 @@ function stamp(event: GameEvent): ServerGameEvent {
 }
 
 export function installGateway(ctx: AppContext): void {
-  const { io, store } = ctx;
+  const { io, store, presence } = ctx;
   const service = new GameRoomService(store);
   const eventBuffer = new EventBuffer();
 
@@ -55,6 +36,8 @@ export function installGateway(ctx: AppContext): void {
       socket.disconnect(true);
       return;
     }
+
+    let joinedRoomId: string | null = null;
 
     void (async () => {
       const room = await store.getById(session.roomId);
@@ -70,15 +53,29 @@ export function installGateway(ctx: AppContext): void {
         return;
       }
       await socket.join(room.id);
-      socket.emit('lobby:update', projectLobby(room));
+      joinedRoomId = room.id;
+      const { wentOnline } = presence.add(room.id, session.playerId);
+      socket.emit('lobby:update', projectLobby(room, presence));
+      if (wentOnline) broadcastLobby(io, room, presence);
       if (room.state) {
         socket.emit('game:state', project(room.state, session.playerId));
-        // replay recent events to catch reconnecting clients up
         for (const ev of eventBuffer.get(room.id)) {
           socket.emit('game:event', ev);
         }
       }
     })();
+
+    socket.on('disconnect', () => {
+      if (!joinedRoomId) return;
+      const roomId = joinedRoomId;
+      const { wentOffline } = presence.remove(roomId, session.playerId);
+      if (wentOffline) {
+        void (async () => {
+          const room = await store.getById(roomId);
+          if (room) broadcastLobby(io, room, presence);
+        })();
+      }
+    });
 
     socket.on('lobby:seat', (payload: unknown, ack?: (resp: unknown) => void) => {
       void (async () => {
@@ -106,7 +103,7 @@ export function installGateway(ctx: AppContext): void {
             p.id === session.playerId ? { ...p, team, seatIndex } : p,
           ),
         }));
-        if (updated) broadcastLobby(io, updated);
+        if (updated) broadcastLobby(io, updated, presence);
         ack?.({ ok: true });
       })();
     });
@@ -130,7 +127,7 @@ export function installGateway(ctx: AppContext): void {
             return { ...p, seatIndex: idx, team };
           });
         const updated = await store.update(room.id, (r) => ({ ...r, players: shuffled }));
-        if (updated) broadcastLobby(io, updated);
+        if (updated) broadcastLobby(io, updated, presence);
         ack?.({ ok: true });
       })();
     });
@@ -164,7 +161,7 @@ export function installGateway(ctx: AppContext): void {
         }
         const updated = await store.getById(room.id);
         if (updated) {
-          broadcastLobby(io, updated);
+          broadcastLobby(io, updated, presence);
           await emitProjectedState(io, updated);
           for (const ev of result.events) {
             const stamped = stamp(ev);

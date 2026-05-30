@@ -19,12 +19,14 @@ export function Table({
   viewerId,
   turnPlayerId,
   hostId,
+  onlineIds,
   score,
 }: {
   players: ClientPlayerView[];
   viewerId: string | null;
   turnPlayerId: string;
   hostId: string | null;
+  onlineIds: Set<string>;
   score: { A: number; B: number };
 }) {
   const sorted = [...players].sort((a, b) => a.seatIndex - b.seatIndex);
@@ -56,6 +58,7 @@ export function Table({
             isViewer={p.id === viewerId}
             isActive={p.id === turnPlayerId}
             isHost={p.id === hostId}
+            isOnline={onlineIds.has(p.id)}
           />
         );
       })}
@@ -70,6 +73,7 @@ function Seat({
   isViewer,
   isActive,
   isHost,
+  isOnline,
 }: {
   player: ClientPlayerView;
   xPct: number;
@@ -77,6 +81,7 @@ function Seat({
   isViewer: boolean;
   isActive: boolean;
   isHost: boolean;
+  isOnline: boolean;
 }) {
   return (
     <div
@@ -92,9 +97,17 @@ function Seat({
           isActive
             ? 'bg-amber-500/15 border-amber-500/60 shadow-lg shadow-amber-500/10'
             : 'bg-slate-900 border-slate-700'
-        } ${isViewer ? 'ring-2 ring-emerald-500/40' : ''}`}
+        } ${isViewer ? 'ring-2 ring-emerald-500/40' : ''} ${
+          !isOnline ? 'opacity-50' : ''
+        }`}
       >
         <div className="flex items-center justify-center gap-1.5">
+          <span
+            className={`inline-block w-1.5 h-1.5 rounded-full ${
+              isOnline ? 'bg-emerald-400' : 'bg-slate-500'
+            }`}
+            title={isOnline ? 'Online' : 'Offline'}
+          />
           <span className="text-sm font-medium truncate">{player.name}</span>
           {isHost && (
             <span className="rounded bg-amber-500/15 text-amber-300 text-[9px] uppercase tracking-wide px-1 py-0.5 border border-amber-500/30">

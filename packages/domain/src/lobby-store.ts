@@ -1,12 +1,14 @@
 import { create } from 'zustand';
 import type { Player, VariantName } from '@literature/shared';
 
+export type LobbyPlayerView = Player & { online: boolean };
+
 export type LobbyView = {
   roomId: string;
   code: string;
   variant: VariantName;
   status: 'lobby' | 'playing' | 'ended';
-  players: Player[];
+  players: LobbyPlayerView[];
   hostId: string;
 };
 

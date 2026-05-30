@@ -98,11 +98,18 @@ describe('integration — 6 clients lobby flow', () => {
       expect(lobby.status).toBe('lobby');
     }
 
-    // every socket waits for the next lobby:update (the post-start broadcast)
+    // wait specifically for the status: 'playing' broadcast — presence-driven
+    // lobby:updates may also be in flight
     const updatePromises = sockets.map(
       (s) =>
         new Promise<LobbyUpdate>((resolve) => {
-          s.once('lobby:update', (payload: LobbyUpdate) => resolve(payload));
+          const handler = (payload: LobbyUpdate): void => {
+            if (payload.status === 'playing') {
+              s.off('lobby:update', handler);
+              resolve(payload);
+            }
+          };
+          s.on('lobby:update', handler);
         }),
     );
 

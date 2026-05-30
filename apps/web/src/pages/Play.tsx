@@ -20,6 +20,7 @@ export function Play() {
   const gameStore = useGameStore();
   const playerId = useSessionStore((s) => s.playerId);
   const hostId = useLobbyStore((s) => s.lobby?.hostId ?? null);
+  const lobbyPlayers = useLobbyStore((s) => s.lobby?.players);
   const isMyTurn = selectIsMyTurn(gameStore, playerId);
   const navigate = useNavigate();
   const setAskOpen = useUiStore((s) => s.setAskModalOpen);
@@ -75,6 +76,7 @@ export function Play() {
           viewerId={playerId}
           turnPlayerId={state.turn.playerId}
           hostId={hostId}
+          onlineIds={new Set((lobbyPlayers ?? []).filter((p) => p.online).map((p) => p.id))}
           score={state.score}
         />
       </section>

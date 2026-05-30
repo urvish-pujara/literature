@@ -8,12 +8,14 @@ import { installSocketAuth } from './socket-auth.js';
 import { registerRoomRoutes } from './routes-rooms.js';
 import { installGateway } from './gateway.js';
 import { startRoomCleanup } from './ttl.js';
+import { PresenceTracker } from './presence.js';
 
 export type AppContext = {
   config: ServerConfig;
   store: RoomStore;
   fastify: FastifyInstance;
   io: SocketIOServer;
+  presence: PresenceTracker;
   stopCleanup?: () => void;
 };
 
@@ -31,7 +33,7 @@ export async function buildServer(config: ServerConfig): Promise<AppContext> {
 
   installSocketAuth(io, config.jwtSecret);
 
-  const ctx: AppContext = { config, store, fastify, io };
+  const ctx: AppContext = { config, store, fastify, io, presence: new PresenceTracker() };
   registerRoomRoutes(fastify, ctx);
   installGateway(ctx);
 

@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 6 — Reconnect, Polish, A11y (in progress)
-**Next action:** Server-side presence tracking — emit `online: boolean` per player so clients can show offline indicators on Table seats.
+**Next action:** Keyboard-only Ask + Claim flow (autofocus, Esc to close modals, tab order).
 
 ---
 
@@ -125,7 +125,7 @@ Goal: the remaining rule surface and the core UX device.
 Goal: shippable quality.
 
 - [x] "Reconnecting…" banner during socket disconnect; non-blocking
-- [ ] Disconnect handling: player marked offline, turn does not advance
+- [x] Disconnect handling: player marked offline, turn does not advance (server presence tracker; broadcasts `online` flag; UI shows offline indicator + dims seat; turn logic unchanged so a disconnected active player simply blocks until they return)
 - [ ] Host action: kick + substitute (or just kick) after extended disconnect
 - [ ] Keyboard-only Ask + Claim flow
 - [ ] Screen-reader announcements for turn changes and claim outcomes

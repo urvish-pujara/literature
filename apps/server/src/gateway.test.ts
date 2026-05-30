@@ -81,6 +81,22 @@ function nextEvent<T>(socket: ClientSocket, event: string): Promise<T> {
   });
 }
 
+function waitForEvent<T>(
+  socket: ClientSocket,
+  event: string,
+  predicate: (p: T) => boolean,
+): Promise<T> {
+  return new Promise((resolve) => {
+    const handler = (payload: T): void => {
+      if (predicate(payload)) {
+        socket.off(event, handler);
+        resolve(payload);
+      }
+    };
+    socket.on(event, handler);
+  });
+}
+
 describe('socket gateway — lobby flow', () => {
   it('sends lobby:update on connect', async () => {
     const { url, ctx: c } = await start();
@@ -126,9 +142,12 @@ describe('socket gateway — lobby flow', () => {
     const { socket: hostSock } = await connectClient(url, host.token);
     const { socket: aliceSock } = await connectClient(url, alice.token);
 
-    const updatePromise = nextEvent<{ players: { id: string; seatIndex: number }[] }>(
+    // Wait specifically for the post-seat update (alice at seat 3) — multiple
+    // lobby:updates may fire from presence broadcasts in between.
+    const updatePromise = waitForEvent<{ players: { id: string; seatIndex: number }[] }>(
       hostSock,
       'lobby:update',
+      (p) => p.players.find((pl) => pl.id === alice.playerId)?.seatIndex === 3,
     );
     aliceSock.emit('lobby:seat', { team: 'B', seatIndex: 3 });
     const update = await updatePromise;

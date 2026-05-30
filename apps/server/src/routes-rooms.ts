@@ -4,6 +4,7 @@ import { CreateRoomBodySchema, JoinRoomBodySchema, type Player } from '@literatu
 import type { AppContext } from './server.js';
 import { generateUniqueCode } from './code-gen.js';
 import { signSession } from './jwt.js';
+import { projectLobby } from './lobby-projection.js';
 
 const JOIN_RATE_LIMIT = {
   max: 30,
@@ -70,14 +71,7 @@ export function registerRoomRoutes(fastify: FastifyInstance, ctx: AppContext): v
     }));
     const token = await signSession({ playerId, roomId: room.id }, ctx.config.jwtSecret);
     if (updated) {
-      ctx.io.to(updated.id).emit('lobby:update', {
-        roomId: updated.id,
-        code: updated.code,
-        variant: updated.variant,
-        status: updated.status,
-        players: updated.players,
-        hostId: updated.hostId,
-      });
+      ctx.io.to(updated.id).emit('lobby:update', projectLobby(updated, ctx.presence));
     }
     return reply.code(200).send({ roomId: room.id, playerId, token });
   });

@@ -35,9 +35,17 @@ export function Lobby() {
   }
 
   const isHost = playerId === lobby.hostId;
-  const occupants = new Map<number, { id: string; name: string; isHost: boolean }>();
+  const occupants = new Map<
+    number,
+    { id: string; name: string; isHost: boolean; online: boolean }
+  >();
   for (const p of lobby.players)
-    occupants.set(p.seatIndex, { id: p.id, name: p.name, isHost: p.id === lobby.hostId });
+    occupants.set(p.seatIndex, {
+      id: p.id,
+      name: p.name,
+      isHost: p.id === lobby.hostId,
+      online: p.online,
+    });
   const seated = lobby.players.length === 6;
   const allSeatsFilled = [0, 1, 2, 3, 4, 5].every((s) => occupants.has(s));
 
@@ -139,7 +147,7 @@ function TeamColumn({
 }: {
   team: 'A' | 'B';
   seats: number[];
-  occupants: Map<number, { id: string; name: string; isHost: boolean }>;
+  occupants: Map<number, { id: string; name: string; isHost: boolean; online: boolean }>;
   myId: string | null;
   busy: boolean;
   onPick: (team: 'A' | 'B', seatIndex: number) => void;
@@ -167,7 +175,17 @@ function TeamColumn({
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="flex items-center gap-1.5 min-w-0">
-                    <span className="truncate">
+                    {occupant && (
+                      <span
+                        className={`shrink-0 inline-block w-2 h-2 rounded-full ${
+                          occupant.online ? 'bg-emerald-400' : 'bg-slate-600'
+                        }`}
+                        title={occupant.online ? 'Online' : 'Offline'}
+                      />
+                    )}
+                    <span
+                      className={`truncate ${occupant && !occupant.online ? 'text-slate-500' : ''}`}
+                    >
                       {occupant?.name ?? <em className="text-slate-500">Empty</em>}
                     </span>
                     {occupant?.isHost && (
