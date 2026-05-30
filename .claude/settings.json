@@ -14,7 +14,15 @@
       "Bash(command -v pnpm)",
       "Bash(pnpm --version)",
       "Bash(command -v node)",
-      "Bash(pnpm install *)"
+      "Bash(pnpm install *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(pnpm add *)",
+      "Bash(pnpm typecheck *)",
+      "Bash(pnpm --filter @literature/server add -D @types/node@22)",
+      "Bash(pnpm lint *)",
+      "Bash(pnpm format:check)",
+      "Bash(pnpm format *)"
     ]
   }
 }

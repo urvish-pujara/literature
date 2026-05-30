@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 0 — Scaffold (in progress)
-**Next action:** ESLint + Prettier at root.
+**Next action:** Vitest setup + trivial test per package.
 
 ---
 
@@ -18,7 +18,7 @@ Goal: a working pnpm workspace with empty packages, TS strict, lint, format. No 
 - [x] Create empty packages: `packages/shared`, `packages/engine`, `packages/domain`, `packages/ui-web`
 - [x] Create empty apps: `apps/server`, `apps/web`
 - [x] Root `tsconfig.base.json` with strict mode; per-package `tsconfig.json` extending it
-- [ ] ESLint + Prettier at root, applied across workspace
+- [x] ESLint + Prettier at root, applied across workspace
 - [ ] Vitest configured at root; one trivial passing test per package
 - [ ] `pnpm typecheck`, `pnpm test`, `pnpm lint` all green
 - [ ] Fill in real Commands section in [CLAUDE.md](CLAUDE.md)
