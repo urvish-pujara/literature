@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 1 — Pure Engine (in progress)
-**Next action:** Define `GameVariant` interface + `CLASSIC` and `EXTENDED` configs.
+**Next action:** Zod schemas mirroring the types.
 
 ---
 
@@ -32,7 +32,7 @@ Goal: a working pnpm workspace with empty packages, TS strict, lint, format. No 
 Goal: deterministic `(state, action) → { state, events[] }` engine. No I/O. Both variants supported.
 
 - [x] Define core types in `packages/shared`: `Card`, `Suit`, `PlayerId`, `Team`, `GameState`, `GameAction`, `GameEvent`
-- [ ] Define `GameVariant` interface + `CLASSIC` and `EXTENDED` configs in `packages/shared`
+- [x] Define `GameVariant` interface + `CLASSIC` and `EXTENDED` configs in `packages/shared`
 - [ ] Zod schemas mirroring the types
 - [ ] `Dealer`: builds deck from variant config, shuffles via injected RNG, deals N cards per player
 - [ ] `ActionValidator`: enforces targeting, base requirement, absence requirement, Joker exception
