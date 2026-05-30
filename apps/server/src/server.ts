@@ -5,6 +5,7 @@ import type { ServerConfig } from './config.js';
 import { InMemoryRoomStore, type RoomStore } from './store.js';
 import { installSocketAuth } from './socket-auth.js';
 import { registerRoomRoutes } from './routes-rooms.js';
+import { installGateway } from './gateway.js';
 
 export type AppContext = {
   config: ServerConfig;
@@ -28,6 +29,7 @@ export async function buildServer(config: ServerConfig): Promise<AppContext> {
 
   const ctx: AppContext = { config, store, fastify, io };
   registerRoomRoutes(fastify, ctx);
+  installGateway(ctx);
 
   return ctx;
 }

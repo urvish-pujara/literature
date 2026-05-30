@@ -33,16 +33,19 @@ async function start(): Promise<{ url: string }> {
 }
 
 describe('socket auth middleware', () => {
-  it('accepts a valid token', async () => {
+  it('accepts a valid token (auth-only assertion: connect_error never fires)', async () => {
     const { url } = await start();
     const token = await signSession({ playerId: 'p1', roomId: 'r1' }, secret);
-    const client = ioClient(url, { auth: { token }, transports: ['websocket'] });
+    const client = ioClient(url, { auth: { token }, transports: ['websocket'], reconnection: false });
     clients.push(client);
-    await new Promise<void>((resolve, reject) => {
-      client.on('connect', () => resolve());
-      client.on('connect_error', (err) => reject(err));
+    // The gateway will disconnect us shortly because room 'r1' does not exist,
+    // but the auth middleware itself does not reject. So `connect` should fire,
+    // and we should NOT see a `connect_error`.
+    const outcome = await new Promise<'connected' | 'rejected'>((resolve) => {
+      client.on('connect', () => resolve('connected'));
+      client.on('connect_error', () => resolve('rejected'));
     });
-    expect(client.connected).toBe(true);
+    expect(outcome).toBe('connected');
   });
 
   it('rejects a missing token', async () => {

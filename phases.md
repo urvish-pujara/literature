@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 2 — Lobby + Transport (in progress)
-**Next action:** Socket connection handler — verify auth, join socket.io room, attach session metadata.
+**Next action:** Room TTL cleanup (30-min eviction if game never starts).
 
 ---
 
@@ -56,9 +56,9 @@ Goal: 6 clients can join a room, pick seats, ready up. No gameplay yet.
 - [x] JWT issuance + verification middleware
 - [x] `POST /rooms` — create room with variant, returns 6-digit code + host token
 - [x] `POST /rooms/:code/join` — returns playerId + session JWT
-- [ ] Socket auth: verify JWT on connect, attach `playerId` + `roomId` to the socket
-- [ ] `lobby:seat`, `lobby:randomize`, `lobby:start` handlers (Zod-validated)
-- [ ] `lobby:update` broadcast per room
+- [x] Socket auth: verify JWT on connect, attach `playerId` + `roomId` to the socket
+- [x] `lobby:seat`, `lobby:randomize`, `lobby:start` handlers (Zod-validated)
+- [x] `lobby:update` broadcast per room
 - [ ] Room TTL (30 min if game never starts) + cleanup
 - [ ] Rate limit on `POST /rooms/:code/join` per IP
 - [ ] Integration test: 6 clients join, seat into teams, host starts, server emits initial state
