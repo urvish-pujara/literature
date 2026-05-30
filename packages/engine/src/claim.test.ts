@@ -162,6 +162,34 @@ describe('resolveClaim — claim by player with zero cards in the set', () => {
   });
 });
 
+describe('resolveClaim — claim by non-active player', () => {
+  it('allows claim during an opponent’s turn', () => {
+    const state: GameState = {
+      ...stateWithHeartsMinorDistributed(TRUE_DIST),
+      turn: { playerId: 'p2', actionCount: 5 },
+    };
+    const result = resolveClaim(state, CLASSIC, correctClaim('p1'));
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.state.score.A).toBe(1);
+      // turn is unchanged by claim
+      expect(result.state.turn.playerId).toBe('p2');
+    }
+  });
+
+  it('allows claim during a teammate’s turn', () => {
+    const state: GameState = {
+      ...stateWithHeartsMinorDistributed(TRUE_DIST),
+      turn: { playerId: 'p3', actionCount: 5 },
+    };
+    const result = resolveClaim(state, CLASSIC, correctClaim('p1'));
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.state.turn.playerId).toBe('p3');
+    }
+  });
+});
+
 describe('resolveClaim — validation errors', () => {
   it('rejects unknown set', () => {
     const state = stateWithHeartsMinorDistributed(TRUE_DIST);

@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 1 — Pure Engine (in progress)
-**Next action:** Additional claim tests (claim by non-active player; off-by-one wrong; zero-cards claimant).
+**Next action:** Turn-flow test — 3-action sequence with hand transfers asserted at each step.
 
 ---
 
@@ -41,7 +41,7 @@ Goal: deterministic `(state, action) → { state, events[] }` engine. No I/O. Bo
 - [x] `ClaimResolver`: correct → claimant's team scores; any wrong → opponents score; cards removed
 - [x] Top-level `applyAction(state, action) → { state, events[] }`
 - [x] **Joker matrix test** — every combo of (asker 0/1/2 Jokers, asker has 8, target 0/1/2 Jokers)
-- [ ] Claim tests: correct claim, off-by-one wrong claim, claim by non-active player, claim by player with zero cards in the set
+- [x] Claim tests: correct claim, off-by-one wrong claim, claim by non-active player, claim by player with zero cards in the set
 - [ ] Turn-flow test: 3-action sequence with hand transfers asserted at each step
 
 **Exit criteria:** engine has no imports outside `shared`. All rule tests pass. Coverage of the validator and claim resolver at 100%.
