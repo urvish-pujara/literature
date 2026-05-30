@@ -1,8 +1,20 @@
 import type { Server as SocketIOServer, Socket } from 'socket.io';
-import { LobbySeatPayloadSchema, type Player, type Team } from '@literature/shared';
+import { mulberry32 } from '@literature/engine';
+import {
+  GameActionSchema,
+  LobbySeatPayloadSchema,
+  project,
+  type GameEvent,
+  type Player,
+  type Team,
+} from '@literature/shared';
+import { nanoid } from 'nanoid';
 import type { AppContext } from './server.js';
 import { getSession } from './socket-auth.js';
 import type { Room } from './store.js';
+import { GameRoomService } from './game-room.js';
+import { emitGameEvent, emitProjectedState, type ServerGameEvent } from './emit.js';
+import { EventBuffer } from './event-buffer.js';
 
 type LobbyView = {
   roomId: string;
@@ -24,13 +36,18 @@ function projectLobby(room: Room): LobbyView {
   };
 }
 
-async function broadcastLobby(io: SocketIOServer, room: Room): Promise<void> {
+function broadcastLobby(io: SocketIOServer, room: Room): void {
   io.to(room.id).emit('lobby:update', projectLobby(room));
-  await Promise.resolve();
+}
+
+function stamp(event: GameEvent): ServerGameEvent {
+  return { ...event, ts: Date.now(), id: nanoid() };
 }
 
 export function installGateway(ctx: AppContext): void {
   const { io, store } = ctx;
+  const service = new GameRoomService(store);
+  const eventBuffer = new EventBuffer();
 
   io.on('connection', (socket: Socket) => {
     const session = getSession(socket);
@@ -54,6 +71,13 @@ export function installGateway(ctx: AppContext): void {
       }
       await socket.join(room.id);
       socket.emit('lobby:update', projectLobby(room));
+      if (room.state) {
+        socket.emit('game:state', project(room.state, session.playerId));
+        // replay recent events to catch reconnecting clients up
+        for (const ev of eventBuffer.get(room.id)) {
+          socket.emit('game:event', ev);
+        }
+      }
     })();
 
     socket.on('lobby:seat', (payload: unknown, ack?: (resp: unknown) => void) => {
@@ -82,7 +106,7 @@ export function installGateway(ctx: AppContext): void {
             p.id === session.playerId ? { ...p, team, seatIndex } : p,
           ),
         }));
-        if (updated) await broadcastLobby(io, updated);
+        if (updated) broadcastLobby(io, updated);
         ack?.({ ok: true });
       })();
     });
@@ -106,7 +130,7 @@ export function installGateway(ctx: AppContext): void {
             return { ...p, seatIndex: idx, team };
           });
         const updated = await store.update(room.id, (r) => ({ ...r, players: shuffled }));
-        if (updated) await broadcastLobby(io, updated);
+        if (updated) broadcastLobby(io, updated);
         ack?.({ ok: true });
       })();
     });
@@ -132,10 +156,80 @@ export function installGateway(ctx: AppContext): void {
           ack?.({ ok: false, code: 'INVALID_SEATING' });
           return;
         }
-        // Phase 2 stops at "ready to start" — actual game start (deal hands, broadcast game:state)
-        // happens in Phase 3 when the engine is wired through the gateway.
-        const updated = await store.update(room.id, (r) => ({ ...r, status: 'playing' }));
-        if (updated) await broadcastLobby(io, updated);
+        const seed = Math.floor(Math.random() * 2 ** 31);
+        const result = await service.startGameForRoom(room.id, mulberry32(seed));
+        if (!result.ok) {
+          ack?.({ ok: false, code: result.code });
+          return;
+        }
+        const updated = await store.getById(room.id);
+        if (updated) {
+          broadcastLobby(io, updated);
+          await emitProjectedState(io, updated);
+          for (const ev of result.events) {
+            const stamped = stamp(ev);
+            eventBuffer.append(room.id, stamped);
+            emitGameEvent(io, room.id, stamped);
+          }
+        }
+        ack?.({ ok: true });
+      })();
+    });
+
+    socket.on('game:ask', (payload: unknown, ack?: (resp: unknown) => void) => {
+      void (async () => {
+        const parsed = GameActionSchema.safeParse(payload);
+        if (!parsed.success || parsed.data.type !== 'ask') {
+          ack?.({ ok: false, code: 'INVALID_PAYLOAD' });
+          return;
+        }
+        if (parsed.data.askerId !== session.playerId) {
+          ack?.({ ok: false, code: 'IMPERSONATION' });
+          return;
+        }
+        const result = await service.handleAction(session.roomId, parsed.data);
+        if (!result.ok) {
+          ack?.({ ok: false, code: result.code, message: result.message });
+          return;
+        }
+        const room = await store.getById(session.roomId);
+        if (room) {
+          await emitProjectedState(io, room);
+          for (const ev of result.result.events) {
+            const stamped = stamp(ev);
+            eventBuffer.append(session.roomId, stamped);
+            emitGameEvent(io, session.roomId, stamped);
+          }
+        }
+        ack?.({ ok: true });
+      })();
+    });
+
+    socket.on('game:claim', (payload: unknown, ack?: (resp: unknown) => void) => {
+      void (async () => {
+        const parsed = GameActionSchema.safeParse(payload);
+        if (!parsed.success || parsed.data.type !== 'claim') {
+          ack?.({ ok: false, code: 'INVALID_PAYLOAD' });
+          return;
+        }
+        if (parsed.data.claimantId !== session.playerId) {
+          ack?.({ ok: false, code: 'IMPERSONATION' });
+          return;
+        }
+        const result = await service.handleAction(session.roomId, parsed.data);
+        if (!result.ok) {
+          ack?.({ ok: false, code: result.code, message: result.message });
+          return;
+        }
+        const room = await store.getById(session.roomId);
+        if (room) {
+          await emitProjectedState(io, room);
+          for (const ev of result.result.events) {
+            const stamped = stamp(ev);
+            eventBuffer.append(session.roomId, stamped);
+            emitGameEvent(io, session.roomId, stamped);
+          }
+        }
         ack?.({ ok: true });
       })();
     });

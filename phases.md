@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 2 — Lobby + Transport (complete) ✓ — 30 server tests pass; REST + sockets working end-to-end across 6 clients; rate-limit + TTL + auth wired.
-**Next action:** Per-recipient emit helper, `game:ask`/`game:claim` handlers, `game:event` broadcast.
+**Next action:** Headless DOM-leak test — two real socket clients in a 6-player game; assert client B's payloads never contain client A's card identities.
 
 ---
 
@@ -73,11 +73,11 @@ Goal: gameplay runs end-to-end on the server. Hand privacy enforced.
 
 - [x] `GameRoomService` — owns one engine instance per room, serializes inbound actions via mutex
 - [x] `project(state, viewerId) → ClientGameState` — single canonical projector
-- [ ] Per-recipient emit helper; `io.to(roomId).emit('game:state', ...)` is banned (lint rule or wrapper-only)
-- [ ] `game:ask` and `game:claim` socket handlers dispatch to engine
-- [ ] `game:event` broadcast (public info only) with server `ts`
-- [ ] Recent-events buffer per room for reconnect rehydration
-- [ ] Reconnect path: socket reconnect → re-auth → fresh projection + recent events
+- [x] Per-recipient emit helper; `io.to(roomId).emit('game:state', ...)` is banned (lint rule or wrapper-only)
+- [x] `game:ask` and `game:claim` socket handlers dispatch to engine
+- [x] `game:event` broadcast (public info only) with server `ts`
+- [x] Recent-events buffer per room for reconnect rehydration
+- [x] Reconnect path: socket reconnect → re-auth → fresh projection + recent events
 - [ ] **Headless DOM-leak test** — two Socket.IO clients in a room; assert client B's payloads never contain client A's card identities across a full game
 
 **Exit criteria:** a scripted 3v3 game runs to completion via socket clients. The leak test is green.
