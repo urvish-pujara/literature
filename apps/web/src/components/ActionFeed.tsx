@@ -6,25 +6,31 @@ export function ActionFeed({ players }: { players: ClientPlayerView[] }) {
   const entries = useFeedStore((s) => s.entries);
   const byId = new Map(players.map((p) => [p.id, p.name]));
 
-  return (
-    <div className="pointer-events-none px-4 py-2">
-      <div className="max-w-2xl mx-auto space-y-1.5">
-        <AnimatePresence initial={false}>
-          {entries.map((e) => (
-            <motion.div
-              key={e.id}
-              layout
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6, transition: { duration: 0.6 } }}
-              transition={{ duration: 0.25 }}
-              className="text-xs text-slate-300 bg-slate-900/70 border border-slate-800 rounded px-3 py-1.5 backdrop-blur"
-            >
-              {describe(e, byId)}
-            </motion.div>
-          ))}
-        </AnimatePresence>
+  if (entries.length === 0) {
+    return (
+      <div className="text-sm text-slate-500 py-6 text-center">
+        No recent activity. Asks and claims will appear here for 15 seconds.
       </div>
+    );
+  }
+
+  return (
+    <div className="space-y-1.5">
+      <AnimatePresence initial={false}>
+        {entries.map((e) => (
+          <motion.div
+            key={e.id}
+            layout
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6, transition: { duration: 0.6 } }}
+            transition={{ duration: 0.25 }}
+            className="text-xs text-slate-300 bg-slate-900/70 border border-slate-800 rounded px-3 py-1.5"
+          >
+            {describe(e, byId)}
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   );
 }

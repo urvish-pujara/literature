@@ -11,9 +11,7 @@ import {
 } from '@literature/domain';
 import { Table } from '../components/Table.js';
 import { Hand } from '../components/Hand.js';
-import { AskModal } from '../components/AskModal.js';
-import { ActionFeed } from '../components/ActionFeed.js';
-import { ClaimBuilder } from '../components/ClaimBuilder.js';
+import { ActionPanel } from '../components/ActionPanel.js';
 import { ClaimReveal } from '../components/ClaimReveal.js';
 import { LiveAnnouncer } from '../components/LiveAnnouncer.js';
 import { GameEndOverlay } from '../components/GameEndOverlay.js';
@@ -25,15 +23,11 @@ export function Play() {
   const hostId = useLobbyStore((s) => s.lobby?.hostId ?? null);
   const lobbyPlayers = useLobbyStore((s) => s.lobby?.players);
   const isMyTurn = selectIsMyTurn(gameStore, playerId);
+  const setActionTab = useUiStore((s) => s.setActionTab);
   const navigate = useNavigate();
-  const setAskOpen = useUiStore((s) => s.setAskModalOpen);
-  const askOpen = useUiStore((s) => s.askModalOpen);
-  const setClaimOpen = useUiStore((s) => s.setClaimBuilderOpen);
-  const claimOpen = useUiStore((s) => s.claimBuilderOpen);
   const prune = useFeedStore((s) => s.prune);
   const [, setTick] = useState(0);
 
-  // pulse so feed timers re-evaluate
   useEffect(() => {
     const handle = setInterval(() => {
       prune(Date.now());
@@ -43,10 +37,13 @@ export function Play() {
   }, [prune]);
 
   useEffect(() => {
-    if (!state) {
-      void navigate('/lobby');
-    }
+    if (!state) void navigate('/lobby');
   }, [state, navigate]);
+
+  // When it becomes your turn, auto-flip the panel to Ask
+  useEffect(() => {
+    if (isMyTurn) setActionTab('ask');
+  }, [isMyTurn, setActionTab]);
 
   if (!state || !playerId) {
     return (
@@ -87,46 +84,27 @@ export function Play() {
         </div>
       </header>
 
-      <section className="flex-1 px-4 py-6">
-        <Table
-          players={state.players}
-          viewerId={playerId}
-          turnPlayerId={state.turn.playerId}
-          hostId={hostId}
-          onlineIds={new Set((lobbyPlayers ?? []).filter((p) => p.online).map((p) => p.id))}
-          score={state.score}
-        />
-      </section>
-
-      <ActionFeed players={state.players} />
-
-      <section className="px-4 py-4 border-t border-slate-800 bg-slate-950/80 backdrop-blur">
-        <div className="flex items-center justify-between mb-3 gap-2">
-          <h2 className="text-sm uppercase tracking-wide text-slate-500">Your hand</h2>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              disabled={claimOpen || state.phase !== 'playing'}
-              onClick={() => setClaimOpen(true)}
-              className="rounded-md bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 font-semibold px-4 py-2 text-sm disabled:opacity-40"
-            >
-              Claim a set
-            </button>
-            <button
-              type="button"
-              disabled={!isMyTurn || askOpen || state.phase !== 'playing'}
-              onClick={() => setAskOpen(true)}
-              className="rounded-md bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold px-4 py-2 text-sm disabled:opacity-40"
-            >
-              Ask for a card
-            </button>
+      <div className="flex-1 flex flex-col lg:flex-row min-h-0">
+        <section className="flex-1 flex flex-col min-h-0">
+          <div className="flex-1 px-4 py-6 flex items-center justify-center">
+            <Table
+              players={state.players}
+              viewerId={playerId}
+              turnPlayerId={state.turn.playerId}
+              hostId={hostId}
+              onlineIds={new Set((lobbyPlayers ?? []).filter((p) => p.online).map((p) => p.id))}
+              score={state.score}
+            />
           </div>
-        </div>
-        <Hand />
-      </section>
+          <section className="px-4 py-4 border-t border-slate-800 bg-slate-950/80 backdrop-blur">
+            <h2 className="text-[11px] uppercase tracking-wide text-slate-500 mb-2">Your hand</h2>
+            <Hand />
+          </section>
+        </section>
 
-      <AskModal open={askOpen} onClose={() => setAskOpen(false)} />
-      <ClaimBuilder open={claimOpen} onClose={() => setClaimOpen(false)} />
+        <ActionPanel players={state.players} />
+      </div>
+
       <ClaimReveal players={state.players} variantName={state.variant} />
       <LiveAnnouncer players={state.players} viewerId={playerId} />
       {state.phase === 'ended' && <GameEndOverlay score={state.score} />}

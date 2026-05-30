@@ -8,27 +8,25 @@ export type Toast = {
   message: string;
 };
 
+export type ActionTab = 'ask' | 'claim' | 'feed';
+
 export type UiState = {
   toasts: Toast[];
-  askModalOpen: boolean;
-  claimBuilderOpen: boolean;
+  actionTab: ActionTab;
   showToast: (toast: Omit<Toast, 'id'> & { id?: string }) => void;
   dismissToast: (id: string) => void;
-  setAskModalOpen: (open: boolean) => void;
-  setClaimBuilderOpen: (open: boolean) => void;
+  setActionTab: (tab: ActionTab) => void;
 };
 
 let nextToastId = 1;
 
 export const useUiStore = create<UiState>((set) => ({
   toasts: [],
-  askModalOpen: false,
-  claimBuilderOpen: false,
+  actionTab: 'feed',
   showToast: (toast) => {
     const id = toast.id ?? `t${nextToastId++}`;
     set((s) => ({ toasts: [...s.toasts, { id, kind: toast.kind, message: toast.message }] }));
   },
   dismissToast: (id) => set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) })),
-  setAskModalOpen: (open) => set({ askModalOpen: open }),
-  setClaimBuilderOpen: (open) => set({ claimBuilderOpen: open }),
+  setActionTab: (tab) => set({ actionTab: tab }),
 }));
