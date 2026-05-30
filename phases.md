@@ -4,8 +4,8 @@ Living document. Update the **Current Status** line and check off todos as work 
 
 ## Current Status
 
-**Phase:** Phase 0 — Scaffold (complete) ✓ — exit criteria met: `pnpm install && pnpm typecheck && pnpm test && pnpm lint` all green from a clean clone.
-**Next action:** Begin Phase 1 — define core types, Zod schemas, and `GameVariant` configs in `packages/shared`.
+**Phase:** Phase 1 — Pure Engine (in progress)
+**Next action:** Define `GameVariant` interface + `CLASSIC` and `EXTENDED` configs.
 
 ---
 
@@ -31,7 +31,7 @@ Goal: a working pnpm workspace with empty packages, TS strict, lint, format. No 
 
 Goal: deterministic `(state, action) → { state, events[] }` engine. No I/O. Both variants supported.
 
-- [ ] Define core types in `packages/shared`: `Card`, `Suit`, `PlayerId`, `Team`, `GameState`, `GameAction`, `GameEvent`
+- [x] Define core types in `packages/shared`: `Card`, `Suit`, `PlayerId`, `Team`, `GameState`, `GameAction`, `GameEvent`
 - [ ] Define `GameVariant` interface + `CLASSIC` and `EXTENDED` configs in `packages/shared`
 - [ ] Zod schemas mirroring the types
 - [ ] `Dealer`: builds deck from variant config, shuffles via injected RNG, deals N cards per player
