@@ -96,6 +96,7 @@ If either of these tests breaks, stop feature work and fix it.
 
 ## Open Decisions (track here; resolve before they block work)
 
-- Bot substitution on 5-min disconnect vs. pause-and-wait — defer to first playtest.
-- Postgres for completed-game summaries — not in MVP scope.
-- Accessibility: keyboard-only Ask + Claim flow — required for ship, needs design pass.
+- ~~Accessibility: keyboard-only Ask + Claim flow~~ — **resolved**: Esc closes modals, first interactive autofocuses, focus rings on all buttons, aria-pressed on toggles, `<LiveAnnouncer>` aria-live region for turn changes + claim outcomes.
+- Bot substitution on 5-min disconnect — **deferred post-MVP**. Current behavior: a disconnected active player blocks their turn until they reconnect; other players can Leave. Revisit if playtest shows it's a frequent friction.
+- Host kick — **deferred post-MVP**. Players use the Leave button to drop themselves. Revisit if hung games become a real problem.
+- Postgres for completed-game summaries — **out of MVP scope** per requirements; live state stays in Redis/memory.

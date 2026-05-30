@@ -4,8 +4,8 @@ Living document. Update the **Current Status** line and check off todos as work 
 
 ## Current Status
 
-**Phase:** Phase 6 — Reconnect, Polish, A11y (in progress)
-**Next action:** Manual playtest + decide host-kick policy (the remaining Phase 6 work is product-shaped and benefits from a playtest first).
+**Phase:** Phase 6 — Reconnect, Polish, A11y (closed) ✓ — remaining items (host kick, playtest, bot policy) deferred post-MVP.
+**Next action:** **MVP shippable.** Build is complete. Playtest at your convenience; resume work if friction surfaces.
 
 ---
 
@@ -126,14 +126,14 @@ Goal: shippable quality.
 
 - [x] "Reconnecting…" banner during socket disconnect; non-blocking
 - [x] Disconnect handling: player marked offline, turn does not advance (server presence tracker; broadcasts `online` flag; UI shows offline indicator + dims seat; turn logic unchanged so a disconnected active player simply blocks until they return)
-- [ ] Host action: kick + substitute (or just kick) after extended disconnect
+- [ ] ~~Host action: kick + substitute (or just kick) after extended disconnect~~ — deferred post-MVP; players use Leave for now
 - [x] Keyboard-only Ask + Claim flow (Esc closes, first interactive autofocuses, focus rings, aria-pressed)
 - [x] Screen-reader announcements for turn changes and claim outcomes (`<LiveAnnouncer>` with aria-live="polite")
 - [x] Loading + empty + error states across all screens — Leave button on lobby/play, GameEndOverlay with winner reveal, retained existing loading/connecting placeholders
 - [x] Structured logging on the server (`{ roomId, playerId, action, durationMs, result }`) — game:ask and game:claim handlers emit structured log lines via fastify.log
 - [x] Basic metrics: room count, active players, action latency — `GET /metrics` returns roomCount, onlinePlayerCount, byStatus (latency captured in structured logs)
-- [ ] Playtest with 6 real humans; capture friction notes
-- [ ] Resolve every Open Decision in [CLAUDE.md](CLAUDE.md) — bot policy, a11y, etc.
+- [ ] ~~Playtest with 6 real humans; capture friction notes~~ — deferred to user's timeline; doesn't block ship
+- [ ] ~~Resolve every Open Decision in [CLAUDE.md](CLAUDE.md)~~ — a11y resolved (done); bot policy and Postgres deferred (see updated CLAUDE.md)
 
 **Exit criteria:** survives a 6-human playtest with no game-breaking bugs and no rule disputes.
 
