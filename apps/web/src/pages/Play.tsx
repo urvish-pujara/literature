@@ -4,6 +4,7 @@ import {
   selectIsMyTurn,
   useFeedStore,
   useGameStore,
+  useLobbyStore,
   useSessionStore,
   useUiStore,
 } from '@literature/domain';
@@ -16,6 +17,7 @@ export function Play() {
   const state = useGameStore((s) => s.state);
   const gameStore = useGameStore();
   const playerId = useSessionStore((s) => s.playerId);
+  const hostId = useLobbyStore((s) => s.lobby?.hostId ?? null);
   const isMyTurn = selectIsMyTurn(gameStore, playerId);
   const navigate = useNavigate();
   const setAskOpen = useUiStore((s) => s.setAskModalOpen);
@@ -68,6 +70,7 @@ export function Play() {
           players={state.players}
           viewerId={playerId}
           turnPlayerId={state.turn.playerId}
+          hostId={hostId}
           score={state.score}
         />
       </section>

@@ -18,11 +18,13 @@ export function Table({
   players,
   viewerId,
   turnPlayerId,
+  hostId,
   score,
 }: {
   players: ClientPlayerView[];
   viewerId: string | null;
   turnPlayerId: string;
+  hostId: string | null;
   score: { A: number; B: number };
 }) {
   const sorted = [...players].sort((a, b) => a.seatIndex - b.seatIndex);
@@ -32,9 +34,7 @@ export function Table({
 
   return (
     <div className="relative w-full aspect-square max-w-2xl mx-auto">
-      {/* table felt */}
       <div className="absolute inset-[8%] rounded-full bg-emerald-900/50 border border-emerald-800/60 shadow-inner" />
-      {/* score badge in the center */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div className="rounded-md bg-slate-950/60 border border-slate-800 px-4 py-2 text-center backdrop-blur">
           <div className="text-xs uppercase text-slate-500 tracking-wide">Score</div>
@@ -44,7 +44,6 @@ export function Table({
           </div>
         </div>
       </div>
-      {/* seats */}
       {sorted.map((p) => {
         const pos = positions[p.seatIndex];
         if (!pos) return null;
@@ -56,6 +55,7 @@ export function Table({
             yPct={pos.yPct}
             isViewer={p.id === viewerId}
             isActive={p.id === turnPlayerId}
+            isHost={p.id === hostId}
           />
         );
       })}
@@ -69,12 +69,14 @@ function Seat({
   yPct,
   isViewer,
   isActive,
+  isHost,
 }: {
   player: ClientPlayerView;
   xPct: number;
   yPct: number;
   isViewer: boolean;
   isActive: boolean;
+  isHost: boolean;
 }) {
   return (
     <div
@@ -92,7 +94,14 @@ function Seat({
             : 'bg-slate-900 border-slate-700'
         } ${isViewer ? 'ring-2 ring-emerald-500/40' : ''}`}
       >
-        <div className="text-sm font-medium truncate">{player.name}</div>
+        <div className="flex items-center justify-center gap-1.5">
+          <span className="text-sm font-medium truncate">{player.name}</span>
+          {isHost && (
+            <span className="rounded bg-amber-500/15 text-amber-300 text-[9px] uppercase tracking-wide px-1 py-0.5 border border-amber-500/30">
+              Host
+            </span>
+          )}
+        </div>
         <div className="text-xs text-slate-400 mt-0.5">
           <span className={player.team === 'A' ? 'text-rose-300' : 'text-sky-300'}>
             Team {player.team}

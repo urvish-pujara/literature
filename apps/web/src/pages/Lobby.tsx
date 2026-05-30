@@ -35,8 +35,9 @@ export function Lobby() {
   }
 
   const isHost = playerId === lobby.hostId;
-  const occupants = new Map<number, { id: string; name: string }>();
-  for (const p of lobby.players) occupants.set(p.seatIndex, { id: p.id, name: p.name });
+  const occupants = new Map<number, { id: string; name: string; isHost: boolean }>();
+  for (const p of lobby.players)
+    occupants.set(p.seatIndex, { id: p.id, name: p.name, isHost: p.id === lobby.hostId });
   const seated = lobby.players.length === 6;
   const allSeatsFilled = [0, 1, 2, 3, 4, 5].every((s) => occupants.has(s));
 
@@ -138,7 +139,7 @@ function TeamColumn({
 }: {
   team: 'A' | 'B';
   seats: number[];
-  occupants: Map<number, { id: string; name: string }>;
+  occupants: Map<number, { id: string; name: string; isHost: boolean }>;
   myId: string | null;
   busy: boolean;
   onPick: (team: 'A' | 'B', seatIndex: number) => void;
@@ -164,12 +165,21 @@ function TeamColumn({
                     : 'bg-slate-900/40 border-dashed border-slate-700 hover:border-slate-500'
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <span>
-                    {occupant?.name ?? <em className="text-slate-500">Empty</em>}
-                    {isMe && <span className="ml-2 text-xs text-emerald-400">(you)</span>}
+                <div className="flex items-center justify-between gap-2">
+                  <span className="flex items-center gap-1.5 min-w-0">
+                    <span className="truncate">
+                      {occupant?.name ?? <em className="text-slate-500">Empty</em>}
+                    </span>
+                    {occupant?.isHost && (
+                      <span className="shrink-0 rounded bg-amber-500/15 text-amber-300 text-[10px] uppercase tracking-wide px-1.5 py-0.5 border border-amber-500/30">
+                        Host
+                      </span>
+                    )}
+                    {isMe && (
+                      <span className="shrink-0 text-[10px] text-emerald-400">(you)</span>
+                    )}
                   </span>
-                  <span className="text-xs text-slate-500">Seat {seatIndex}</span>
+                  <span className="shrink-0 text-xs text-slate-500">Seat {seatIndex}</span>
                 </div>
               </button>
             </li>
