@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { askForCard, useGameStore, useSessionStore, useUiStore } from '@literature/domain';
 import {
   CLASSIC,
@@ -9,6 +9,7 @@ import {
   type GameVariant,
 } from '@literature/shared';
 import { CardChip } from './CardChip.js';
+import { useEscapeToClose } from '../hooks/useEscapeToClose.js';
 
 export function AskModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const state = useGameStore((s) => s.state);
@@ -16,6 +17,16 @@ export function AskModal({ open, onClose }: { open: boolean; onClose: () => void
   const showToast = useUiStore((s) => s.showToast);
   const [targetId, setTargetId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const firstTargetRef = useRef<HTMLButtonElement | null>(null);
+
+  useEscapeToClose(open, () => {
+    setTargetId(null);
+    onClose();
+  });
+
+  useEffect(() => {
+    if (open) firstTargetRef.current?.focus();
+  }, [open]);
 
   if (!open || !state || !playerId) return null;
 
@@ -57,28 +68,37 @@ export function AskModal({ open, onClose }: { open: boolean; onClose: () => void
   }
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-950/80 p-4">
+    <div
+      className="fixed inset-0 z-40 flex items-center justify-center bg-slate-950/80 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="ask-modal-title"
+    >
       <div className="w-full max-w-2xl rounded-lg bg-slate-900 border border-slate-700 p-5 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">Ask for a card</h3>
+          <h3 id="ask-modal-title" className="text-lg font-semibold">
+            Ask for a card
+          </h3>
           <button
             type="button"
             onClick={close}
+            aria-label="Cancel"
             className="text-slate-400 hover:text-slate-200 text-sm"
           >
-            Cancel
+            Cancel (Esc)
           </button>
         </div>
 
         <section className="mb-5">
           <div className="text-xs uppercase tracking-wide text-slate-500 mb-2">Target</div>
           <div className="flex flex-wrap gap-2">
-            {opponents.map((p) => (
+            {opponents.map((p, idx) => (
               <TargetChip
                 key={p.id}
                 player={p}
                 selected={p.id === targetId}
                 onPick={() => setTargetId(p.id)}
+                buttonRef={idx === 0 ? firstTargetRef : undefined}
               />
             ))}
           </div>
@@ -116,16 +136,20 @@ function TargetChip({
   player,
   selected,
   onPick,
+  buttonRef,
 }: {
   player: ClientPlayerView;
   selected: boolean;
   onPick: () => void;
+  buttonRef?: React.Ref<HTMLButtonElement>;
 }) {
   return (
     <button
+      ref={buttonRef}
       type="button"
       onClick={onPick}
-      className={`rounded-md px-3 py-2 text-sm border transition ${
+      aria-pressed={selected}
+      className={`rounded-md px-3 py-2 text-sm border transition focus:outline-none focus:ring-2 focus:ring-emerald-400 ${
         selected
           ? 'bg-emerald-500/20 border-emerald-400 text-emerald-100'
           : 'bg-slate-800 hover:bg-slate-700 border-slate-700'

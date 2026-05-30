@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { submitClaim, useGameStore, useSessionStore, useUiStore } from '@literature/domain';
 import {
   CLASSIC,
@@ -8,6 +8,7 @@ import {
   type GameVariant,
 } from '@literature/shared';
 import { CardChip } from './CardChip.js';
+import { useEscapeToClose } from '../hooks/useEscapeToClose.js';
 
 export function ClaimBuilder({ open, onClose }: { open: boolean; onClose: () => void }) {
   const state = useGameStore((s) => s.state);
@@ -16,6 +17,17 @@ export function ClaimBuilder({ open, onClose }: { open: boolean; onClose: () => 
   const [setId, setSetId] = useState<string | null>(null);
   const [assignments, setAssignments] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
+  const firstSetButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  useEscapeToClose(open, () => {
+    setSetId(null);
+    setAssignments({});
+    onClose();
+  });
+
+  useEffect(() => {
+    if (open) firstSetButtonRef.current?.focus();
+  }, [open]);
 
   if (!open || !state || !playerId) return null;
 
@@ -68,28 +80,38 @@ export function ClaimBuilder({ open, onClose }: { open: boolean; onClose: () => 
   const complete = activeSet ? activeSet.cards.every((c) => assignments[c.id]) : false;
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-950/80 p-4">
+    <div
+      className="fixed inset-0 z-40 flex items-center justify-center bg-slate-950/80 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="claim-builder-title"
+    >
       <div className="w-full max-w-2xl rounded-lg bg-slate-900 border border-slate-700 p-5 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">Claim a set</h3>
+          <h3 id="claim-builder-title" className="text-lg font-semibold">
+            Claim a set
+          </h3>
           <button
             type="button"
             onClick={close}
+            aria-label="Cancel"
             className="text-slate-400 hover:text-slate-200 text-sm"
           >
-            Cancel
+            Cancel (Esc)
           </button>
         </div>
 
         <section className="mb-5">
           <div className="text-xs uppercase tracking-wide text-slate-500 mb-2">Set</div>
           <div className="flex flex-wrap gap-2">
-            {unclaimedSets.map((s) => (
+            {unclaimedSets.map((s, idx) => (
               <button
                 key={s.setId}
+                ref={idx === 0 ? firstSetButtonRef : undefined}
                 type="button"
                 onClick={() => pickSet(s.setId)}
-                className={`rounded-md px-3 py-2 text-sm border transition ${
+                aria-pressed={s.setId === setId}
+                className={`rounded-md px-3 py-2 text-sm border transition focus:outline-none focus:ring-2 focus:ring-emerald-400 ${
                   s.setId === setId
                     ? 'bg-emerald-500/20 border-emerald-400 text-emerald-100'
                     : 'bg-slate-800 hover:bg-slate-700 border-slate-700'

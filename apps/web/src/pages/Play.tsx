@@ -14,6 +14,7 @@ import { AskModal } from '../components/AskModal.js';
 import { ActionFeed } from '../components/ActionFeed.js';
 import { ClaimBuilder } from '../components/ClaimBuilder.js';
 import { ClaimReveal } from '../components/ClaimReveal.js';
+import { LiveAnnouncer } from '../components/LiveAnnouncer.js';
 
 export function Play() {
   const state = useGameStore((s) => s.state);
@@ -111,6 +112,7 @@ export function Play() {
       <AskModal open={askOpen} onClose={() => setAskOpen(false)} />
       <ClaimBuilder open={claimOpen} onClose={() => setClaimOpen(false)} />
       <ClaimReveal players={state.players} variantName={state.variant} />
+      <LiveAnnouncer players={state.players} viewerId={playerId} />
     </main>
   );
 }

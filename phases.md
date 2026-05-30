@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 6 — Reconnect, Polish, A11y (in progress)
-**Next action:** Keyboard-only Ask + Claim flow (autofocus, Esc to close modals, tab order).
+**Next action:** Structured server logging and loading/empty/error state sweep.
 
 ---
 
@@ -127,8 +127,8 @@ Goal: shippable quality.
 - [x] "Reconnecting…" banner during socket disconnect; non-blocking
 - [x] Disconnect handling: player marked offline, turn does not advance (server presence tracker; broadcasts `online` flag; UI shows offline indicator + dims seat; turn logic unchanged so a disconnected active player simply blocks until they return)
 - [ ] Host action: kick + substitute (or just kick) after extended disconnect
-- [ ] Keyboard-only Ask + Claim flow
-- [ ] Screen-reader announcements for turn changes and claim outcomes
+- [x] Keyboard-only Ask + Claim flow (Esc closes, first interactive autofocuses, focus rings, aria-pressed)
+- [x] Screen-reader announcements for turn changes and claim outcomes (`<LiveAnnouncer>` with aria-live="polite")
 - [ ] Loading + empty + error states across all screens
 - [ ] Structured logging on the server (`{ roomId, playerId, action, durationMs, result }`)
 - [ ] Basic metrics: room count, active players, action latency
