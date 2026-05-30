@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 4 — Frontend Gameplay (in progress)
-**Next action:** Landing page (create room / join room with code).
+**Next action:** Lobby screen — seat selection, randomize, ready/start (host only).
 
 ---
 
@@ -91,7 +91,7 @@ Goal: a player can sit at a table, see their hand, ask for a card, see the resul
 - [x] `apps/web` skeleton: Vite + React + Tailwind + Router
 - [x] `sessionStore`, `lobbyStore`, `gameStore`, `feedStore`, `uiStore` (Zustand) in `packages/domain`
 - [x] Socket client singleton with auto-reconnect; routes events to stores
-- [ ] Landing page: create room / join room with code
+- [x] Landing page: create room / join room with code
 - [ ] Lobby screen: seat selection, randomize, ready/start (host only)
 - [ ] `<Table>` with 6 seats on an ellipse, viewer at bottom-center, alternating teams
 - [ ] `<Hand>` with sort (suit → half-suit → sequential, 8s+Jokers clustered)

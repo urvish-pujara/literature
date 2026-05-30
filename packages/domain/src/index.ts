@@ -4,3 +4,4 @@ export * from './game-store.js';
 export * from './feed-store.js';
 export * from './ui-store.js';
 export * from './socket-client.js';
+export * from './api-client.js';
