@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 1 — Pure Engine (in progress)
-**Next action:** Zod schemas mirroring the types.
+**Next action:** Implement `Dealer` (build deck, shuffle via injected RNG, deal N cards per player).
 
 ---
 
@@ -33,7 +33,7 @@ Goal: deterministic `(state, action) → { state, events[] }` engine. No I/O. Bo
 
 - [x] Define core types in `packages/shared`: `Card`, `Suit`, `PlayerId`, `Team`, `GameState`, `GameAction`, `GameEvent`
 - [x] Define `GameVariant` interface + `CLASSIC` and `EXTENDED` configs in `packages/shared`
-- [ ] Zod schemas mirroring the types
+- [x] Zod schemas mirroring the types
 - [ ] `Dealer`: builds deck from variant config, shuffles via injected RNG, deals N cards per player
 - [ ] `ActionValidator`: enforces targeting, base requirement, absence requirement, Joker exception
 - [ ] State-transfer logic: regular card move, Joker move (exactly one)
