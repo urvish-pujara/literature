@@ -6,12 +6,14 @@ import { InMemoryRoomStore, type RoomStore } from './store.js';
 import { installSocketAuth } from './socket-auth.js';
 import { registerRoomRoutes } from './routes-rooms.js';
 import { installGateway } from './gateway.js';
+import { startRoomCleanup } from './ttl.js';
 
 export type AppContext = {
   config: ServerConfig;
   store: RoomStore;
   fastify: FastifyInstance;
   io: SocketIOServer;
+  stopCleanup?: () => void;
 };
 
 export async function buildServer(config: ServerConfig): Promise<AppContext> {
@@ -30,6 +32,12 @@ export async function buildServer(config: ServerConfig): Promise<AppContext> {
   const ctx: AppContext = { config, store, fastify, io };
   registerRoomRoutes(fastify, ctx);
   installGateway(ctx);
+
+  ctx.stopCleanup = startRoomCleanup(ctx);
+  fastify.addHook('onClose', (_inst, done) => {
+    ctx.stopCleanup?.();
+    done();
+  });
 
   return ctx;
 }
