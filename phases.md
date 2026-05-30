@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 1 — Pure Engine (in progress)
-**Next action:** Top-level `applyAction(state, action) → { state, events[] }`.
+**Next action:** Comprehensive Joker matrix test (asker × target × has-8 = 18 cases) through `applyAction`.
 
 ---
 
@@ -39,7 +39,7 @@ Goal: deterministic `(state, action) → { state, events[] }` engine. No I/O. Bo
 - [x] State-transfer logic: regular card move, Joker move (exactly one)
 - [x] `TurnController`: successful ask retains turn, failed ask passes turn
 - [x] `ClaimResolver`: correct → claimant's team scores; any wrong → opponents score; cards removed
-- [ ] Top-level `applyAction(state, action) → { state, events[] }`
+- [x] Top-level `applyAction(state, action) → { state, events[] }`
 - [ ] **Joker matrix test** — every combo of (asker 0/1/2 Jokers, asker has 8, target 0/1/2 Jokers)
 - [ ] Claim tests: correct claim, off-by-one wrong claim, claim by non-active player, claim by player with zero cards in the set
 - [ ] Turn-flow test: 3-action sequence with hand transfers asserted at each step
