@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  leaveRoom,
   selectIsMyTurn,
   useFeedStore,
   useGameStore,
@@ -15,6 +16,7 @@ import { ActionFeed } from '../components/ActionFeed.js';
 import { ClaimBuilder } from '../components/ClaimBuilder.js';
 import { ClaimReveal } from '../components/ClaimReveal.js';
 import { LiveAnnouncer } from '../components/LiveAnnouncer.js';
+import { GameEndOverlay } from '../components/GameEndOverlay.js';
 
 export function Play() {
   const state = useGameStore((s) => s.state);
@@ -56,18 +58,32 @@ export function Play() {
 
   return (
     <main className="min-h-screen flex flex-col">
-      <header className="px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+      <header className="px-4 py-3 border-b border-slate-800 flex items-center justify-between gap-3">
         <div className="text-sm text-slate-400">
           Variant <span className="text-slate-200">{state.variant}</span>
           <span className="mx-2 text-slate-700">·</span>
           Turn <span className="text-slate-200">#{state.turn.actionCount + 1}</span>
         </div>
-        <div className="text-sm">
-          {isMyTurn ? (
-            <span className="text-amber-300">Your turn</span>
-          ) : (
-            <span className="text-slate-500">Waiting…</span>
-          )}
+        <div className="flex items-center gap-3">
+          <div className="text-sm">
+            {state.phase === 'ended' ? (
+              <span className="text-slate-400">Game over</span>
+            ) : isMyTurn ? (
+              <span className="text-amber-300">Your turn</span>
+            ) : (
+              <span className="text-slate-500">Waiting…</span>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              leaveRoom();
+              void navigate('/', { replace: true });
+            }}
+            className="rounded-md bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/40 text-rose-200 px-3 py-1 text-xs"
+          >
+            Leave
+          </button>
         </div>
       </header>
 
@@ -113,6 +129,7 @@ export function Play() {
       <ClaimBuilder open={claimOpen} onClose={() => setClaimOpen(false)} />
       <ClaimReveal players={state.players} variantName={state.variant} />
       <LiveAnnouncer players={state.players} viewerId={playerId} />
+      {state.phase === 'ended' && <GameEndOverlay score={state.score} />}
     </main>
   );
 }

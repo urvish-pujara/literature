@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  leaveRoom,
   randomizeSeats,
   seat,
   startGame,
@@ -76,10 +77,15 @@ export function Lobby() {
       .finally(() => setBusy(false));
   }
 
+  function leave(): void {
+    leaveRoom();
+    void navigate('/', { replace: true });
+  }
+
   return (
     <main className="min-h-screen p-6">
       <div className="max-w-3xl mx-auto space-y-6">
-        <header className="flex items-center justify-between">
+        <header className="flex items-center justify-between gap-3">
           <div>
             <h1 className="text-3xl font-bold">Lobby</h1>
             <p className="text-sm text-slate-400 mt-1">
@@ -87,26 +93,35 @@ export function Lobby() {
               · {lobby.players.length}/6 players · {lobby.status}
             </p>
           </div>
-          {isHost && (
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={randomize}
-                disabled={busy || !allSeatsFilled}
-                className="rounded-md bg-slate-800 hover:bg-slate-700 px-4 py-2 text-sm disabled:opacity-50"
-              >
-                Randomize
-              </button>
-              <button
-                type="button"
-                onClick={start}
-                disabled={busy || !seated}
-                className="rounded-md bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold px-4 py-2 text-sm disabled:opacity-50"
-              >
-                Start
-              </button>
-            </div>
-          )}
+          <div className="flex gap-2 shrink-0">
+            {isHost && (
+              <>
+                <button
+                  type="button"
+                  onClick={randomize}
+                  disabled={busy || !allSeatsFilled}
+                  className="rounded-md bg-slate-800 hover:bg-slate-700 px-4 py-2 text-sm disabled:opacity-50"
+                >
+                  Randomize
+                </button>
+                <button
+                  type="button"
+                  onClick={start}
+                  disabled={busy || !seated}
+                  className="rounded-md bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold px-4 py-2 text-sm disabled:opacity-50"
+                >
+                  Start
+                </button>
+              </>
+            )}
+            <button
+              type="button"
+              onClick={leave}
+              className="rounded-md bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/40 text-rose-200 px-4 py-2 text-sm"
+            >
+              Leave
+            </button>
+          </div>
         </header>
 
         <section className="grid grid-cols-2 gap-4">

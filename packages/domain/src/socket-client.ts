@@ -4,6 +4,7 @@ import { useLobbyStore, type LobbyView } from './lobby-store.js';
 import { useGameStore } from './game-store.js';
 import { useFeedStore } from './feed-store.js';
 import { useUiStore } from './ui-store.js';
+import { useSessionStore } from './session-store.js';
 
 export type AckResponse = { ok: true } | { ok: false; code: string; message?: string };
 
@@ -62,6 +63,14 @@ export function connectSocket(url: string, token: string): Socket {
   });
 
   return s;
+}
+
+export function leaveRoom(): void {
+  disconnectSocket();
+  useSessionStore.getState().clear();
+  useLobbyStore.getState().clear();
+  useGameStore.getState().clear();
+  useFeedStore.getState().clear();
 }
 
 export function disconnectSocket(): void {

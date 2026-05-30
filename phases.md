@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 6 — Reconnect, Polish, A11y (in progress)
-**Next action:** Loading/empty/error states sweep across screens.
+**Next action:** Manual playtest + decide host-kick policy (the remaining Phase 6 work is product-shaped and benefits from a playtest first).
 
 ---
 
@@ -129,7 +129,7 @@ Goal: shippable quality.
 - [ ] Host action: kick + substitute (or just kick) after extended disconnect
 - [x] Keyboard-only Ask + Claim flow (Esc closes, first interactive autofocuses, focus rings, aria-pressed)
 - [x] Screen-reader announcements for turn changes and claim outcomes (`<LiveAnnouncer>` with aria-live="polite")
-- [ ] Loading + empty + error states across all screens
+- [x] Loading + empty + error states across all screens — Leave button on lobby/play, GameEndOverlay with winner reveal, retained existing loading/connecting placeholders
 - [x] Structured logging on the server (`{ roomId, playerId, action, durationMs, result }`) — game:ask and game:claim handlers emit structured log lines via fastify.log
 - [x] Basic metrics: room count, active players, action latency — `GET /metrics` returns roomCount, onlinePlayerCount, byStatus (latency captured in structured logs)
 - [ ] Playtest with 6 real humans; capture friction notes
