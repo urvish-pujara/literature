@@ -12,5 +12,8 @@
     "test": "pnpm -r test",
     "lint": "pnpm -r lint",
     "build": "pnpm -r build"
+  },
+  "devDependencies": {
+    "typescript": "5.7.3"
   }
 }

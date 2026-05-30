@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 0 — Scaffold (in progress)
-**Next action:** Root `tsconfig.base.json` + per-package configs.
+**Next action:** ESLint + Prettier at root.
 
 ---
 
@@ -17,7 +17,7 @@ Goal: a working pnpm workspace with empty packages, TS strict, lint, format. No 
 - [x] Initialize pnpm workspace (`pnpm-workspace.yaml`, root `package.json`)
 - [x] Create empty packages: `packages/shared`, `packages/engine`, `packages/domain`, `packages/ui-web`
 - [x] Create empty apps: `apps/server`, `apps/web`
-- [ ] Root `tsconfig.base.json` with strict mode; per-package `tsconfig.json` extending it
+- [x] Root `tsconfig.base.json` with strict mode; per-package `tsconfig.json` extending it
 - [ ] ESLint + Prettier at root, applied across workspace
 - [ ] Vitest configured at root; one trivial passing test per package
 - [ ] `pnpm typecheck`, `pnpm test`, `pnpm lint` all green

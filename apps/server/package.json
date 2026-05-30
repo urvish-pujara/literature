@@ -13,5 +13,8 @@
   "dependencies": {
     "@literature/engine": "workspace:*",
     "@literature/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.19"
   }
 }
