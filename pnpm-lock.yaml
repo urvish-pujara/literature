@@ -7,3 +7,26 @@ settings:
 importers:
 
   .: {}
+
+  packages/domain:
+    dependencies:
+      '@literature/shared':
+        specifier: workspace:*
+        version: link:../shared
+
+  packages/engine:
+    dependencies:
+      '@literature/shared':
+        specifier: workspace:*
+        version: link:../shared
+
+  packages/shared: {}
+
+  packages/ui-web:
+    dependencies:
+      '@literature/domain':
+        specifier: workspace:*
+        version: link:../domain
+      '@literature/shared':
+        specifier: workspace:*
+        version: link:../shared
