@@ -12,6 +12,7 @@ import { Table } from '../components/Table.js';
 import { Hand } from '../components/Hand.js';
 import { AskModal } from '../components/AskModal.js';
 import { ActionFeed } from '../components/ActionFeed.js';
+import { ClaimBuilder } from '../components/ClaimBuilder.js';
 
 export function Play() {
   const state = useGameStore((s) => s.state);
@@ -22,6 +23,8 @@ export function Play() {
   const navigate = useNavigate();
   const setAskOpen = useUiStore((s) => s.setAskModalOpen);
   const askOpen = useUiStore((s) => s.askModalOpen);
+  const setClaimOpen = useUiStore((s) => s.setClaimBuilderOpen);
+  const claimOpen = useUiStore((s) => s.claimBuilderOpen);
   const prune = useFeedStore((s) => s.prune);
   const [, setTick] = useState(0);
 
@@ -78,21 +81,32 @@ export function Play() {
       <ActionFeed players={state.players} />
 
       <section className="px-4 py-4 border-t border-slate-800 bg-slate-950/80 backdrop-blur">
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mb-3 gap-2">
           <h2 className="text-sm uppercase tracking-wide text-slate-500">Your hand</h2>
-          <button
-            type="button"
-            disabled={!isMyTurn || askOpen}
-            onClick={() => setAskOpen(true)}
-            className="rounded-md bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold px-4 py-2 text-sm disabled:opacity-40"
-          >
-            Ask for a card
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              disabled={claimOpen || state.phase !== 'playing'}
+              onClick={() => setClaimOpen(true)}
+              className="rounded-md bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 font-semibold px-4 py-2 text-sm disabled:opacity-40"
+            >
+              Claim a set
+            </button>
+            <button
+              type="button"
+              disabled={!isMyTurn || askOpen || state.phase !== 'playing'}
+              onClick={() => setAskOpen(true)}
+              className="rounded-md bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold px-4 py-2 text-sm disabled:opacity-40"
+            >
+              Ask for a card
+            </button>
+          </div>
         </div>
         <Hand />
       </section>
 
       <AskModal open={askOpen} onClose={() => setAskOpen(false)} />
+      <ClaimBuilder open={claimOpen} onClose={() => setClaimOpen(false)} />
     </main>
   );
 }
