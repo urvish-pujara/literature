@@ -4,8 +4,8 @@ Living document. Update the **Current Status** line and check off todos as work 
 
 ## Current Status
 
-**Phase:** Phase 5 — Claim Builder + Ephemeral Feed (complete) ✓ — claim flow end-to-end with animated reveal of true distribution; no history surface; all engine claim tests pass.
-**Next action:** Begin Phase 6 — "Reconnecting…" banner + disconnect handling.
+**Phase:** Phase 6 — Reconnect, Polish, A11y (in progress)
+**Next action:** Server-side presence tracking — emit `online: boolean` per player so clients can show offline indicators on Table seats.
 
 ---
 
@@ -124,7 +124,7 @@ Goal: the remaining rule surface and the core UX device.
 
 Goal: shippable quality.
 
-- [ ] "Reconnecting…" banner during socket disconnect; non-blocking
+- [x] "Reconnecting…" banner during socket disconnect; non-blocking
 - [ ] Disconnect handling: player marked offline, turn does not advance
 - [ ] Host action: kick + substitute (or just kick) after extended disconnect
 - [ ] Keyboard-only Ask + Claim flow

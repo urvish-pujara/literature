@@ -5,6 +5,7 @@ import { Landing } from './pages/Landing.js';
 import { Lobby } from './pages/Lobby.js';
 import { Play } from './pages/Play.js';
 import { ToastSurface } from './components/ToastSurface.js';
+import { ConnectionBanner } from './components/ConnectionBanner.js';
 
 const SOCKET_URL = '/';
 
@@ -44,6 +45,7 @@ export function App() {
         <Route path="/play" element={<Play />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <ConnectionBanner />
       <ToastSurface />
     </>
   );
