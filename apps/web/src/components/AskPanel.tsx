@@ -71,7 +71,12 @@ export function AskPanel() {
   return (
     <div className="space-y-5">
       <section>
-        <div className="text-[11px] uppercase tracking-wide text-slate-500 mb-2">Target</div>
+        <div
+          className="text-[10px] uppercase tracking-[0.3em] text-slate-500 mb-2"
+          style={{ fontFamily: 'Cinzel, serif' }}
+        >
+          Target
+        </div>
         <div className="flex flex-wrap gap-2">
           {opponents.map((p) => (
             <TargetChip
@@ -85,8 +90,11 @@ export function AskPanel() {
       </section>
 
       <section className="space-y-4">
-        <div className="text-[11px] uppercase tracking-wide text-slate-500">
-          Card {targetId ? '' : '(pick a target first)'}
+        <div
+          className="text-[10px] uppercase tracking-[0.3em] text-slate-500"
+          style={{ fontFamily: 'Cinzel, serif' }}
+        >
+          Card Sets {targetId ? '' : '· pick target first'}
         </div>
         {eligibleSets.length === 0 ? (
           <p className="text-sm text-slate-400">
@@ -167,7 +175,7 @@ function SetRow({
 
   return (
     <div>
-      <div className="text-[10px] uppercase tracking-wide text-slate-500 mb-1.5">
+      <div className="text-[9px] uppercase tracking-[0.25em] text-slate-500 mb-1.5">
         {displayName}
       </div>
       <div className="flex flex-wrap gap-1.5">

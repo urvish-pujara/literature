@@ -12,13 +12,23 @@ export function ActionPanel({ players }: { players: ClientPlayerView[] }) {
   const isMyTurn = playerId !== null && turnPlayerId === playerId;
 
   return (
-    <aside className="w-full lg:w-[380px] shrink-0 border-l border-slate-800 bg-slate-950/40 backdrop-blur flex flex-col">
-      <nav className="flex border-b border-slate-800" role="tablist" aria-label="Actions">
+    <aside
+      className="w-full lg:w-[400px] shrink-0 border-l border-amber-900/30 backdrop-blur flex flex-col"
+      style={{
+        background:
+          'linear-gradient(180deg, rgba(10,18,22,0.88) 0%, rgba(6,12,16,0.88) 100%)',
+      }}
+    >
+      <nav
+        className="flex border-b border-slate-800/80 px-2 pt-3 gap-1"
+        role="tablist"
+        aria-label="Actions"
+      >
         <TabButton
           tab="ask"
           active={tab === 'ask'}
           onClick={() => setTab('ask')}
-          badge={isMyTurn ? 'Your turn' : undefined}
+          badge={isMyTurn && tab !== 'ask' ? '•' : undefined}
         >
           Ask
         </TabButton>
@@ -29,7 +39,7 @@ export function ActionPanel({ players }: { players: ClientPlayerView[] }) {
           Feed
         </TabButton>
       </nav>
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto p-5">
         {tab === 'ask' && <AskPanel />}
         {tab === 'claim' && <ClaimPanel />}
         {tab === 'feed' && <ActionFeed players={players} />}
@@ -58,17 +68,24 @@ function TabButton({
       aria-selected={active}
       aria-controls={`panel-${tab}`}
       onClick={onClick}
-      className={`flex-1 px-4 py-3 text-sm border-b-2 transition flex items-center justify-center gap-2 ${
-        active
-          ? 'border-emerald-400 text-emerald-100 bg-slate-900/60'
-          : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/30'
+      className={`flex-1 px-4 py-3 text-xs uppercase tracking-[0.2em] transition relative ${
+        active ? 'text-cyan-200' : 'text-slate-500 hover:text-slate-300'
       }`}
+      style={{ fontFamily: 'Cinzel, serif' }}
     >
-      <span>{children}</span>
-      {badge && (
-        <span className="text-[10px] uppercase tracking-wide rounded bg-amber-500/15 text-amber-300 px-1.5 py-0.5 border border-amber-500/30">
-          {badge}
-        </span>
+      <span className="inline-flex items-center gap-1.5">
+        {children}
+        {badge && <span className="text-amber-400 text-base leading-none">{badge}</span>}
+      </span>
+      {active && (
+        <span
+          className="absolute left-3 right-3 -bottom-px h-[2px] rounded-full"
+          style={{
+            background:
+              'linear-gradient(90deg, transparent 0%, rgba(34,211,238,0.95) 50%, transparent 100%)',
+            boxShadow: '0 0 12px rgba(34,211,238,0.6)',
+          }}
+        />
       )}
     </button>
   );

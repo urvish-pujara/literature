@@ -69,7 +69,12 @@ export function ClaimPanel() {
   return (
     <div className="space-y-5">
       <section>
-        <div className="text-[11px] uppercase tracking-wide text-slate-500 mb-2">Set</div>
+        <div
+          className="text-[10px] uppercase tracking-[0.3em] text-slate-500 mb-2"
+          style={{ fontFamily: 'Cinzel, serif' }}
+        >
+          Set to Claim
+        </div>
         <div className="flex flex-wrap gap-2">
           {unclaimedSets.map((s) => (
             <button
@@ -77,10 +82,10 @@ export function ClaimPanel() {
               type="button"
               onClick={() => pickSet(s.setId)}
               aria-pressed={s.setId === setId}
-              className={`rounded-md px-3 py-1.5 text-xs border transition focus:outline-none focus:ring-2 focus:ring-emerald-400 ${
+              className={`rounded-md px-3 py-1.5 text-xs border transition focus:outline-none focus:ring-2 focus:ring-cyan-400 ${
                 s.setId === setId
-                  ? 'bg-emerald-500/20 border-emerald-400 text-emerald-100'
-                  : 'bg-slate-800 hover:bg-slate-700 border-slate-700'
+                  ? 'bg-cyan-500/15 border-cyan-400/70 text-cyan-100'
+                  : 'bg-slate-800/60 hover:bg-slate-700/70 border-slate-700'
               }`}
             >
               {s.displayName}
@@ -95,8 +100,11 @@ export function ClaimPanel() {
       {activeSet && (
         <>
           <section className="space-y-2">
-            <div className="text-[11px] uppercase tracking-wide text-slate-500">
-              Assign every card
+            <div
+              className="text-[10px] uppercase tracking-[0.3em] text-slate-500"
+              style={{ fontFamily: 'Cinzel, serif' }}
+            >
+              Assign Cards
             </div>
             {activeSet.cards.map((c) => (
               <CardAssignmentRow
@@ -109,17 +117,24 @@ export function ClaimPanel() {
             ))}
           </section>
 
-          <div className="flex items-center justify-between gap-3">
-            <div className="text-xs text-slate-500">
+          <div className="flex items-center justify-between gap-3 pt-1">
+            <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
               {Object.keys(assignments).length} / {activeSet.cards.length} assigned
             </div>
             <button
               type="button"
               onClick={submit}
               disabled={busy || !complete}
-              className="rounded-md bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold px-4 py-2 text-sm disabled:opacity-40"
+              className="rounded-md font-semibold px-5 py-2.5 text-sm text-slate-950 disabled:opacity-40 disabled:cursor-not-allowed transition focus:outline-none focus:ring-2 focus:ring-amber-300"
+              style={{
+                background: 'linear-gradient(180deg, #f6c45a 0%, #c98a2a 100%)',
+                boxShadow:
+                  '0 4px 14px rgba(201,138,42,0.45), inset 0 1px 0 rgba(255,255,255,0.45)',
+                fontFamily: 'Cinzel, serif',
+                letterSpacing: '0.05em',
+              }}
             >
-              {busy ? 'Submitting…' : 'Submit claim'}
+              {busy ? 'Submitting…' : 'Submit Claim'}
             </button>
           </div>
         </>

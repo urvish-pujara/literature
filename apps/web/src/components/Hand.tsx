@@ -11,16 +11,16 @@ export function Hand() {
   const special = hand.filter((c) => c.group === 'eights-jokers');
 
   return (
-    <div className="w-full overflow-x-auto pb-3">
-      <div className="flex items-end justify-center gap-1.5">
+    <div className="w-full overflow-x-auto pb-2 pt-1">
+      <div className="flex items-end justify-center gap-1">
         {standard.map((c) => (
-          <CardChip key={c.id} card={c} size="md" />
+          <CardChip key={c.id} card={c} size="lg" />
         ))}
         {special.length > 0 && (
           <>
-            <div className="w-3 self-stretch" aria-hidden />
+            <div className="w-4 self-stretch" aria-hidden />
             {special.map((c) => (
-              <CardChip key={c.id} card={c} size="md" />
+              <CardChip key={c.id} card={c} size="lg" />
             ))}
           </>
         )}

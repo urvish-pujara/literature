@@ -1,1 +1,55 @@
 @import 'tailwindcss';
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at top, rgba(20, 50, 56, 0.6) 0%, transparent 60%),
+    radial-gradient(ellipse at bottom, rgba(8, 22, 26, 0.8) 0%, transparent 50%),
+    linear-gradient(180deg, #04101a 0%, #061a1d 60%, #020a0d 100%);
+  background-attachment: fixed;
+  font-family:
+    'Inter',
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+/* Animated soft glow for active table seats */
+@keyframes seatPulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+}
+
+.seat-glow {
+  animation: seatPulse 2.6s ease-in-out infinite;
+}
+
+/* Subtle felt texture overlay for the table */
+.table-felt {
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(20, 75, 78, 0.85) 0%, rgba(7, 25, 28, 0.95) 60%, rgba(3, 15, 17, 1) 100%),
+    repeating-radial-gradient(
+      circle at 50% 50%,
+      transparent 0px,
+      transparent 1px,
+      rgba(0, 0, 0, 0.06) 1px,
+      rgba(0, 0, 0, 0.06) 2px
+    );
+}

@@ -55,18 +55,29 @@ export function Play() {
 
   return (
     <main className="min-h-screen flex flex-col">
-      <header className="px-4 py-3 border-b border-slate-800 flex items-center justify-between gap-3">
-        <div className="text-sm text-slate-400">
-          Variant <span className="text-slate-200">{state.variant}</span>
-          <span className="mx-2 text-slate-700">·</span>
-          Turn <span className="text-slate-200">#{state.turn.actionCount + 1}</span>
+      <header className="px-5 py-3 border-b border-amber-900/30 flex items-center justify-between gap-3 bg-slate-950/40 backdrop-blur">
+        <div className="flex items-baseline gap-4">
+          <h1
+            className="text-base text-amber-300 tracking-[0.3em] uppercase"
+            style={{ fontFamily: 'Cinzel, serif' }}
+          >
+            Literature
+          </h1>
+          <div className="text-[10px] uppercase tracking-[0.25em] text-slate-500">
+            <span className="text-slate-300">{state.variant}</span>
+            <span className="mx-2 text-slate-700">·</span>
+            Turn #{state.turn.actionCount + 1}
+          </div>
         </div>
         <div className="flex items-center gap-3">
-          <div className="text-sm">
+          <div
+            className="text-[11px] uppercase tracking-[0.25em]"
+            style={{ fontFamily: 'Cinzel, serif' }}
+          >
             {state.phase === 'ended' ? (
               <span className="text-slate-400">Game over</span>
             ) : isMyTurn ? (
-              <span className="text-amber-300">Your turn</span>
+              <span className="text-amber-300">Your Turn</span>
             ) : (
               <span className="text-slate-500">Waiting…</span>
             )}
@@ -96,8 +107,19 @@ export function Play() {
               score={state.score}
             />
           </div>
-          <section className="px-4 py-4 border-t border-slate-800 bg-slate-950/80 backdrop-blur">
-            <h2 className="text-[11px] uppercase tracking-wide text-slate-500 mb-2">Your hand</h2>
+          <section
+            className="px-4 py-4 border-t border-amber-900/30 backdrop-blur"
+            style={{
+              background:
+                'linear-gradient(180deg, rgba(8,16,20,0.85) 0%, rgba(4,10,13,0.95) 100%)',
+            }}
+          >
+            <h2
+              className="text-[10px] uppercase tracking-[0.3em] text-slate-500 mb-2 text-center"
+              style={{ fontFamily: 'Cinzel, serif' }}
+            >
+              Your Hand
+            </h2>
             <Hand />
           </section>
         </section>
