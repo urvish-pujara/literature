@@ -4,8 +4,8 @@ Living document. Update the **Current Status** line and check off todos as work 
 
 ## Current Status
 
-**Phase:** Phase 3 — Wire Engine Through Gateway (complete) ✓ — 37 server tests pass; DOM-leak invariant tested with 6 real socket clients across initial-deal and post-ask snapshots.
-**Next action:** Begin Phase 4 — `apps/web` skeleton (Vite + React + Tailwind + Router).
+**Phase:** Phase 4 — Frontend Gameplay (in progress)
+**Next action:** Zustand stores in `packages/domain` (session, lobby, game, feed, ui).
 
 ---
 
@@ -88,7 +88,7 @@ Goal: gameplay runs end-to-end on the server. Hand privacy enforced.
 
 Goal: a player can sit at a table, see their hand, ask for a card, see the result.
 
-- [ ] `apps/web` skeleton: Vite + React + Tailwind + Router
+- [x] `apps/web` skeleton: Vite + React + Tailwind + Router
 - [ ] `sessionStore`, `lobbyStore`, `gameStore`, `feedStore`, `uiStore` (Zustand) in `packages/domain`
 - [ ] Socket client singleton with auto-reconnect; routes events to stores
 - [ ] Landing page: create room / join room with code
