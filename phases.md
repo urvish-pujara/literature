@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 4 — Frontend Gameplay (in progress)
-**Next action:** Zustand stores in `packages/domain` (session, lobby, game, feed, ui).
+**Next action:** Socket client singleton with auto-reconnect; routes events to stores.
 
 ---
 
@@ -89,7 +89,7 @@ Goal: gameplay runs end-to-end on the server. Hand privacy enforced.
 Goal: a player can sit at a table, see their hand, ask for a card, see the result.
 
 - [x] `apps/web` skeleton: Vite + React + Tailwind + Router
-- [ ] `sessionStore`, `lobbyStore`, `gameStore`, `feedStore`, `uiStore` (Zustand) in `packages/domain`
+- [x] `sessionStore`, `lobbyStore`, `gameStore`, `feedStore`, `uiStore` (Zustand) in `packages/domain`
 - [ ] Socket client singleton with auto-reconnect; routes events to stores
 - [ ] Landing page: create room / join room with code
 - [ ] Lobby screen: seat selection, randomize, ready/start (host only)

@@ -121,6 +121,9 @@ importers:
       '@literature/shared':
         specifier: workspace:*
         version: link:../shared
+      zustand:
+        specifier: ^5.0.14
+        version: 5.0.14(@types/react@19.2.15)(react@19.2.6)
 
   packages/engine:
     dependencies:
