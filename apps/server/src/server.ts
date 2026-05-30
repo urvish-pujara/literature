@@ -4,6 +4,7 @@ import { Server as SocketIOServer } from 'socket.io';
 import type { ServerConfig } from './config.js';
 import { InMemoryRoomStore, type RoomStore } from './store.js';
 import { installSocketAuth } from './socket-auth.js';
+import { registerRoomRoutes } from './routes-rooms.js';
 
 export type AppContext = {
   config: ServerConfig;
@@ -25,5 +26,8 @@ export async function buildServer(config: ServerConfig): Promise<AppContext> {
 
   installSocketAuth(io, config.jwtSecret);
 
-  return { config, store, fastify, io };
+  const ctx: AppContext = { config, store, fastify, io };
+  registerRoomRoutes(fastify, ctx);
+
+  return ctx;
 }
