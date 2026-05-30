@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 2 — Lobby + Transport (in progress)
-**Next action:** JWT issuance + verification middleware (already partially in place — formalize as middleware).
+**Next action:** `POST /rooms` — create room with variant, return 6-digit code + host token.
 
 ---
 
@@ -53,7 +53,7 @@ Goal: deterministic `(state, action) → { state, events[] }` engine. No I/O. Bo
 Goal: 6 clients can join a room, pick seats, ready up. No gameplay yet.
 
 - [x] `apps/server` skeleton: Fastify + Socket.IO + Redis client (mock-in-memory fallback for local dev)
-- [ ] JWT issuance + verification middleware
+- [x] JWT issuance + verification middleware
 - [ ] `POST /rooms` — create room with variant, returns 6-digit code + host token
 - [ ] `POST /rooms/:code/join` — returns playerId + session JWT
 - [ ] Socket auth: verify JWT on connect, attach `playerId` + `roomId` to the socket
