@@ -8,7 +8,13 @@
       "Bash(gh auth *)",
       "Bash(git init *)",
       "Bash(git config *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(gh repo *)",
+      "Bash(command -v pnpm)",
+      "Bash(pnpm --version)",
+      "Bash(command -v node)",
+      "Bash(pnpm install *)"
     ]
   }
 }

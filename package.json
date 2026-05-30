@@ -1,0 +1,16 @@
+{
+  "name": "literature",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Real-time multiplayer Literature card game (3v3, 6 players)",
+  "packageManager": "pnpm@11.1.3",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "build": "pnpm -r build"
+  }
+}

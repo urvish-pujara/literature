@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 0 — Scaffold (in progress)
-**Next action:** Initialize pnpm workspace.
+**Next action:** Create empty packages (`shared`, `engine`, `domain`, `ui-web`).
 
 ---
 
@@ -14,7 +14,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 Goal: a working pnpm workspace with empty packages, TS strict, lint, format. No game code yet.
 
 - [x] Initialize git repo, configure per-repo identity, create public GitHub repo `literature` on the secondary account, push initial commit
-- [ ] Initialize pnpm workspace (`pnpm-workspace.yaml`, root `package.json`)
+- [x] Initialize pnpm workspace (`pnpm-workspace.yaml`, root `package.json`)
 - [ ] Create empty packages: `packages/shared`, `packages/engine`, `packages/domain`, `packages/ui-web`
 - [ ] Create empty apps: `apps/server`, `apps/web`
 - [ ] Root `tsconfig.base.json` with strict mode; per-package `tsconfig.json` extending it
