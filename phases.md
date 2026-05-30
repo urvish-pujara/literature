@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 1 — Pure Engine (in progress)
-**Next action:** Implement `ActionValidator` (targeting, base requirement, absence requirement, Joker exception).
+**Next action:** State-transfer logic (regular card move, Joker move — exactly one).
 
 ---
 
@@ -35,7 +35,7 @@ Goal: deterministic `(state, action) → { state, events[] }` engine. No I/O. Bo
 - [x] Define `GameVariant` interface + `CLASSIC` and `EXTENDED` configs in `packages/shared`
 - [x] Zod schemas mirroring the types
 - [x] `Dealer`: builds deck from variant config, shuffles via injected RNG, deals N cards per player
-- [ ] `ActionValidator`: enforces targeting, base requirement, absence requirement, Joker exception
+- [x] `ActionValidator`: enforces targeting, base requirement, absence requirement, Joker exception
 - [ ] State-transfer logic: regular card move, Joker move (exactly one)
 - [ ] `TurnController`: successful ask retains turn, failed ask passes turn
 - [ ] `ClaimResolver`: correct → claimant's team scores; any wrong → opponents score; cards removed
