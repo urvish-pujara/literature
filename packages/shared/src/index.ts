@@ -5,3 +5,4 @@ export * from './actions.js';
 export * from './events.js';
 export * from './variants.js';
 export * from './schemas.js';
+export * from './projection.js';
