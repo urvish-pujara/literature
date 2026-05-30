@@ -4,8 +4,8 @@ Living document. Update the **Current Status** line and check off todos as work 
 
 ## Current Status
 
-**Phase:** Phase 4 — Frontend Gameplay (in progress)
-**Next action:** Manual playtest in 6 browser tabs — first visual verification.
+**Phase:** Phase 5 — Claim Builder + Ephemeral Feed (in progress)
+**Next action:** Install framer-motion; refit `<ActionFeed>` with `AnimatePresence` for proper exit animation.
 
 ---
 
@@ -98,7 +98,7 @@ Goal: a player can sit at a table, see their hand, ask for a card, see the resul
 - [x] Responsive: 8 and 9 card hands both render cleanly at common viewport sizes
 - [x] `<AskModal>`: pick opposing-team target → pick card; "Joker" shown as single option
 - [x] Server-error toast surface
-- [ ] Manual test: full game runnable across 6 browser tabs
+- [x] Manual test: full game runnable across 6 browser tabs (initial playtest passed; UI iterations applied: red suits, host badge, combined ask modal, visual card chips)
 
 **Exit criteria:** a complete game playable end-to-end in the browser with 6 humans. Ask flow and turn transitions feel correct.
 
