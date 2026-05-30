@@ -1,0 +1,17 @@
+{
+  "name": "@literature/server",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "node --experimental-strip-types src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "eslint src --max-warnings 0"
+  },
+  "dependencies": {
+    "@literature/engine": "workspace:*",
+    "@literature/shared": "workspace:*"
+  }
+}

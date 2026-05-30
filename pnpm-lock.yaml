@@ -8,6 +8,27 @@ importers:
 
   .: {}
 
+  apps/server:
+    dependencies:
+      '@literature/engine':
+        specifier: workspace:*
+        version: link:../../packages/engine
+      '@literature/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+
+  apps/web:
+    dependencies:
+      '@literature/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
+      '@literature/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+      '@literature/ui-web':
+        specifier: workspace:*
+        version: link:../../packages/ui-web
+
   packages/domain:
     dependencies:
       '@literature/shared':

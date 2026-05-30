@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 0 — Scaffold (in progress)
-**Next action:** Create empty apps (`server`, `web`).
+**Next action:** Root `tsconfig.base.json` + per-package configs.
 
 ---
 
@@ -16,7 +16,7 @@ Goal: a working pnpm workspace with empty packages, TS strict, lint, format. No 
 - [x] Initialize git repo, configure per-repo identity, create public GitHub repo `literature` on the secondary account, push initial commit
 - [x] Initialize pnpm workspace (`pnpm-workspace.yaml`, root `package.json`)
 - [x] Create empty packages: `packages/shared`, `packages/engine`, `packages/domain`, `packages/ui-web`
-- [ ] Create empty apps: `apps/server`, `apps/web`
+- [x] Create empty apps: `apps/server`, `apps/web`
 - [ ] Root `tsconfig.base.json` with strict mode; per-package `tsconfig.json` extending it
 - [ ] ESLint + Prettier at root, applied across workspace
 - [ ] Vitest configured at root; one trivial passing test per package
