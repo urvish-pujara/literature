@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 6 — Reconnect, Polish, A11y (in progress)
-**Next action:** Structured server logging and loading/empty/error state sweep.
+**Next action:** Loading/empty/error states sweep across screens.
 
 ---
 
@@ -130,8 +130,8 @@ Goal: shippable quality.
 - [x] Keyboard-only Ask + Claim flow (Esc closes, first interactive autofocuses, focus rings, aria-pressed)
 - [x] Screen-reader announcements for turn changes and claim outcomes (`<LiveAnnouncer>` with aria-live="polite")
 - [ ] Loading + empty + error states across all screens
-- [ ] Structured logging on the server (`{ roomId, playerId, action, durationMs, result }`)
-- [ ] Basic metrics: room count, active players, action latency
+- [x] Structured logging on the server (`{ roomId, playerId, action, durationMs, result }`) — game:ask and game:claim handlers emit structured log lines via fastify.log
+- [x] Basic metrics: room count, active players, action latency — `GET /metrics` returns roomCount, onlinePlayerCount, byStatus (latency captured in structured logs)
 - [ ] Playtest with 6 real humans; capture friction notes
 - [ ] Resolve every Open Decision in [CLAUDE.md](CLAUDE.md) — bot policy, a11y, etc.
 

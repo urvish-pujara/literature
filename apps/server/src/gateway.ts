@@ -26,9 +26,19 @@ function stamp(event: GameEvent): ServerGameEvent {
 }
 
 export function installGateway(ctx: AppContext): void {
-  const { io, store, presence } = ctx;
+  const { io, store, presence, fastify } = ctx;
   const service = new GameRoomService(store);
   const eventBuffer = new EventBuffer();
+
+  function logAction(fields: {
+    action: string;
+    roomId: string;
+    playerId: string;
+    durationMs: number;
+    result: string;
+  }): void {
+    fastify.log.info(fields, 'socket action');
+  }
 
   io.on('connection', (socket: Socket) => {
     const session = getSession(socket);
@@ -174,19 +184,32 @@ export function installGateway(ctx: AppContext): void {
     });
 
     socket.on('game:ask', (payload: unknown, ack?: (resp: unknown) => void) => {
+      const startedAt = Date.now();
+      const finalize = (result: string): void => {
+        logAction({
+          action: 'game:ask',
+          roomId: session.roomId,
+          playerId: session.playerId,
+          durationMs: Date.now() - startedAt,
+          result,
+        });
+      };
       void (async () => {
         const parsed = GameActionSchema.safeParse(payload);
         if (!parsed.success || parsed.data.type !== 'ask') {
           ack?.({ ok: false, code: 'INVALID_PAYLOAD' });
+          finalize('INVALID_PAYLOAD');
           return;
         }
         if (parsed.data.askerId !== session.playerId) {
           ack?.({ ok: false, code: 'IMPERSONATION' });
+          finalize('IMPERSONATION');
           return;
         }
         const result = await service.handleAction(session.roomId, parsed.data);
         if (!result.ok) {
           ack?.({ ok: false, code: result.code, message: result.message });
+          finalize(result.code);
           return;
         }
         const room = await store.getById(session.roomId);
@@ -199,23 +222,37 @@ export function installGateway(ctx: AppContext): void {
           }
         }
         ack?.({ ok: true });
+        finalize('ok');
       })();
     });
 
     socket.on('game:claim', (payload: unknown, ack?: (resp: unknown) => void) => {
+      const startedAt = Date.now();
+      const finalize = (result: string): void => {
+        logAction({
+          action: 'game:claim',
+          roomId: session.roomId,
+          playerId: session.playerId,
+          durationMs: Date.now() - startedAt,
+          result,
+        });
+      };
       void (async () => {
         const parsed = GameActionSchema.safeParse(payload);
         if (!parsed.success || parsed.data.type !== 'claim') {
           ack?.({ ok: false, code: 'INVALID_PAYLOAD' });
+          finalize('INVALID_PAYLOAD');
           return;
         }
         if (parsed.data.claimantId !== session.playerId) {
           ack?.({ ok: false, code: 'IMPERSONATION' });
+          finalize('IMPERSONATION');
           return;
         }
         const result = await service.handleAction(session.roomId, parsed.data);
         if (!result.ok) {
           ack?.({ ok: false, code: result.code, message: result.message });
+          finalize(result.code);
           return;
         }
         const room = await store.getById(session.roomId);
@@ -227,6 +264,7 @@ export function installGateway(ctx: AppContext): void {
             emitGameEvent(io, session.roomId, stamped);
           }
         }
+        finalize('ok');
         ack?.({ ok: true });
       })();
     });

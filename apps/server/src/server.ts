@@ -6,6 +6,7 @@ import type { ServerConfig } from './config.js';
 import { InMemoryRoomStore, type RoomStore } from './store.js';
 import { installSocketAuth } from './socket-auth.js';
 import { registerRoomRoutes } from './routes-rooms.js';
+import { registerMetricsRoutes } from './routes-metrics.js';
 import { installGateway } from './gateway.js';
 import { startRoomCleanup } from './ttl.js';
 import { PresenceTracker } from './presence.js';
@@ -35,6 +36,7 @@ export async function buildServer(config: ServerConfig): Promise<AppContext> {
 
   const ctx: AppContext = { config, store, fastify, io, presence: new PresenceTracker() };
   registerRoomRoutes(fastify, ctx);
+  registerMetricsRoutes(fastify, ctx);
   installGateway(ctx);
 
   ctx.stopCleanup = startRoomCleanup(ctx);
