@@ -2,13 +2,17 @@ import type { ClientPlayerView } from '@literature/shared';
 
 type Position = { xPct: number; yPct: number };
 
+// Horizontal ellipse: wider horizontal radius than vertical.
+const RADIUS_X_PCT = 42;
+const RADIUS_Y_PCT = 38;
+
 function seatPositions(viewerSeatIndex: number): Position[] {
   const positions: Position[] = [];
   for (let i = 0; i < 6; i++) {
     const relative = (i - viewerSeatIndex + 6) % 6;
     const angle = (relative * 60 + 90) * (Math.PI / 180);
-    const xPct = 50 + 42 * Math.cos(angle);
-    const yPct = 50 + 42 * Math.sin(angle);
+    const xPct = 50 + RADIUS_X_PCT * Math.cos(angle);
+    const yPct = 50 + RADIUS_Y_PCT * Math.sin(angle);
     positions[i] = { xPct, yPct };
   }
   return positions;
@@ -48,29 +52,29 @@ export function Table({
   const positions = seatPositions(viewerSeat);
 
   return (
-    <div className="relative w-full aspect-square max-w-[640px] mx-auto">
+    <div className="relative w-full aspect-[16/10] max-w-[920px] mx-auto">
       {/* Outer brass rim */}
       <div
-        className="absolute inset-0 rounded-full"
+        className="absolute inset-0 rounded-[50%]"
         style={{
           background:
-            'radial-gradient(circle at 50% 30%, #5c3e1e 0%, #2c1c0a 35%, #150a02 70%, #0a0501 100%)',
+            'radial-gradient(ellipse at 50% 30%, #5c3e1e 0%, #2c1c0a 35%, #150a02 70%, #0a0501 100%)',
           boxShadow: '0 30px 80px rgba(0,0,0,0.7), inset 0 2px 0 rgba(255,210,140,0.18)',
         }}
       />
       {/* Inner brass ring */}
       <div
-        className="absolute inset-[3.5%] rounded-full border-2 border-amber-700/40"
+        className="absolute inset-[3.5%] rounded-[50%] border-2 border-amber-700/40"
         style={{
           background:
             'linear-gradient(180deg, rgba(140, 90, 40, 0.25) 0%, rgba(60, 35, 12, 0.6) 100%)',
         }}
       />
       {/* Felt */}
-      <div className="absolute inset-[7%] rounded-full table-felt shadow-[inset_0_0_80px_rgba(0,0,0,0.7)]" />
+      <div className="absolute inset-[7%] rounded-[50%] table-felt shadow-[inset_0_0_80px_rgba(0,0,0,0.7)]" />
       {/* Felt rim line */}
-      <div className="absolute inset-[10%] rounded-full border border-amber-700/15" />
-      <div className="absolute inset-[14%] rounded-full border border-dashed border-amber-700/10" />
+      <div className="absolute inset-[10%] rounded-[50%] border border-amber-700/15" />
+      <div className="absolute inset-[14%] rounded-[50%] border border-dashed border-amber-700/10" />
 
       {/* Score badge */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
