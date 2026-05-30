@@ -11,10 +11,16 @@
     "lint": "eslint src --max-warnings 0"
   },
   "dependencies": {
+    "@fastify/cors": "^10.1.0",
     "@literature/engine": "workspace:*",
-    "@literature/shared": "workspace:*"
+    "@literature/shared": "workspace:*",
+    "fastify": "^5.8.5",
+    "jose": "^5.10.0",
+    "nanoid": "^5.1.11",
+    "socket.io": "^4.8.3"
   },
   "devDependencies": {
-    "@types/node": "^22.19.19"
+    "@types/node": "^22.19.19",
+    "tsx": "^4.22.3"
   }
 }

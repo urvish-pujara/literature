@@ -4,8 +4,8 @@ Living document. Update the **Current Status** line and check off todos as work 
 
 ## Current Status
 
-**Phase:** Phase 1 — Pure Engine (complete) ✓ — 77 engine tests pass; engine has zero imports outside `@literature/shared`; validator and claim resolver fully tested.
-**Next action:** Begin Phase 2 — `apps/server` skeleton (Fastify + Socket.IO + Redis-or-memory store).
+**Phase:** Phase 2 — Lobby + Transport (in progress)
+**Next action:** JWT issuance + verification middleware (already partially in place — formalize as middleware).
 
 ---
 
@@ -52,7 +52,7 @@ Goal: deterministic `(state, action) → { state, events[] }` engine. No I/O. Bo
 
 Goal: 6 clients can join a room, pick seats, ready up. No gameplay yet.
 
-- [ ] `apps/server` skeleton: Fastify + Socket.IO + Redis client (mock-in-memory fallback for local dev)
+- [x] `apps/server` skeleton: Fastify + Socket.IO + Redis client (mock-in-memory fallback for local dev)
 - [ ] JWT issuance + verification middleware
 - [ ] `POST /rooms` — create room with variant, returns 6-digit code + host token
 - [ ] `POST /rooms/:code/join` — returns playerId + session JWT
