@@ -13,6 +13,7 @@ import { Hand } from '../components/Hand.js';
 import { AskModal } from '../components/AskModal.js';
 import { ActionFeed } from '../components/ActionFeed.js';
 import { ClaimBuilder } from '../components/ClaimBuilder.js';
+import { ClaimReveal } from '../components/ClaimReveal.js';
 
 export function Play() {
   const state = useGameStore((s) => s.state);
@@ -107,6 +108,7 @@ export function Play() {
 
       <AskModal open={askOpen} onClose={() => setAskOpen(false)} />
       <ClaimBuilder open={claimOpen} onClose={() => setClaimOpen(false)} />
+      <ClaimReveal players={state.players} variantName={state.variant} />
     </main>
   );
 }

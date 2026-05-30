@@ -4,8 +4,8 @@ Living document. Update the **Current Status** line and check off todos as work 
 
 ## Current Status
 
-**Phase:** Phase 5 — Claim Builder + Ephemeral Feed (in progress)
-**Next action:** Build `<ClaimBuilder>` — drag-or-tap assign 6 cards in a set to teammates.
+**Phase:** Phase 5 — Claim Builder + Ephemeral Feed (complete) ✓ — claim flow end-to-end with animated reveal of true distribution; no history surface; all engine claim tests pass.
+**Next action:** Begin Phase 6 — "Reconnecting…" banner + disconnect handling.
 
 ---
 
@@ -108,13 +108,13 @@ Goal: a player can sit at a table, see their hand, ask for a card, see the resul
 
 Goal: the remaining rule surface and the core UX device.
 
-- [ ] `<ClaimBuilder>`: drag-assign 6 cards in a set to teammates; submit disabled until complete
-- [ ] Claim entry point visible at all times (any player, any turn state)
-- [ ] Claim outcome animation: reveal true distribution, score update
+- [x] `<ClaimBuilder>`: drag-assign 6 cards in a set to teammates; submit disabled until complete
+- [x] Claim entry point visible at all times (any player, any turn state)
+- [x] Claim outcome animation: reveal true distribution, score update
 - [x] `<ActionFeed>` with Framer Motion `AnimatePresence`; entries fade and self-delete at 15s
-- [ ] On reconnect, client filters server-sent recent events older than 15s before rendering
-- [ ] No history surface anywhere in the UI (verify in code review)
-- [ ] Tests: claim with all correct, one wrong, claim by player with zero cards in set
+- [x] On reconnect, client filters server-sent recent events older than 15s before rendering (in [socket-client.ts](packages/domain/src/socket-client.ts))
+- [x] No history surface anywhere in the UI (verify in code review) — only `<ActionFeed>` exists, all entries self-delete via `FADE_MS=15_000`
+- [x] Tests: claim with all correct, one wrong, claim by player with zero cards in set (engine-side in [claim.test.ts](packages/engine/src/claim.test.ts))
 
 **Exit criteria:** all requirements in [requirements_doc.md](requirements_doc.md) §4–§5 implemented. No permanent action log exists.
 
