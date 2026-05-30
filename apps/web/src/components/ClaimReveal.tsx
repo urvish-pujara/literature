@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useFeedStore } from '@literature/domain';
 import type { ClaimedEvent, ClientPlayerView } from '@literature/shared';
@@ -7,7 +7,7 @@ import { CardChip } from './CardChip.js';
 
 type ShownEvent = ClaimedEvent & { id: string; ts: number };
 
-const REVEAL_MS = 5_000;
+const REVEAL_MS = 6_000;
 
 export function ClaimReveal({
   players,
@@ -18,21 +18,37 @@ export function ClaimReveal({
 }) {
   const entries = useFeedStore((s) => s.entries);
   const [active, setActive] = useState<ShownEvent | null>(null);
-  const [seenIds] = useState<Set<string>>(() => new Set());
+  const seenIdsRef = useRef<Set<string>>(new Set());
+  const dismissTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function dismiss(): void {
+    if (dismissTimerRef.current) {
+      clearTimeout(dismissTimerRef.current);
+      dismissTimerRef.current = null;
+    }
+    setActive(null);
+  }
 
   useEffect(() => {
     for (const e of entries) {
       if (e.type !== 'claimed') continue;
-      if (seenIds.has(e.id)) continue;
-      seenIds.add(e.id);
+      if (seenIdsRef.current.has(e.id)) continue;
+      seenIdsRef.current.add(e.id);
+      if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
       setActive(e);
-      const handle = setTimeout(() => {
+      dismissTimerRef.current = setTimeout(() => {
+        dismissTimerRef.current = null;
         setActive((curr) => (curr?.id === e.id ? null : curr));
       }, REVEAL_MS);
-      return () => clearTimeout(handle);
+      break;
     }
-    return undefined;
-  }, [entries, seenIds]);
+  }, [entries]);
+
+  useEffect(() => {
+    return () => {
+      if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
+    };
+  }, []);
 
   const variant: GameVariant = variantName === 'extended' ? EXTENDED : CLASSIC;
   const set = active ? variant.sets.find((s) => s.setId === active.setId) : null;
@@ -47,32 +63,44 @@ export function ClaimReveal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
-          className="fixed inset-0 z-30 flex items-center justify-center pointer-events-none p-4"
+          className="fixed inset-0 z-30 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-sm"
+          onClick={dismiss}
         >
           <motion.div
             initial={{ scale: 0.9, y: 10 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.95, y: -6 }}
             transition={{ duration: 0.3, type: 'spring', bounce: 0.2 }}
-            className={`rounded-xl border-2 p-5 max-w-md w-full backdrop-blur shadow-2xl ${
+            onClick={(e) => e.stopPropagation()}
+            className={`rounded-xl border-2 p-5 max-w-md w-full shadow-2xl ${
               active.success
                 ? 'bg-emerald-500/15 border-emerald-400'
                 : 'bg-rose-500/15 border-rose-400'
             }`}
           >
-            <div className="text-center">
-              <div
-                className={`text-xs uppercase tracking-widest mb-1 ${
-                  active.success ? 'text-emerald-300' : 'text-rose-300'
-                }`}
+            <div className="flex items-start justify-between">
+              <div className="flex-1 text-center">
+                <div
+                  className={`text-xs uppercase tracking-widest mb-1 ${
+                    active.success ? 'text-emerald-300' : 'text-rose-300'
+                  }`}
+                >
+                  {active.success ? 'Claim correct' : 'Claim wrong'}
+                </div>
+                <div className="text-lg font-semibold">{set.displayName}</div>
+                <div className="text-sm text-slate-300 mt-1">
+                  {byId.get(active.claimantId) ?? active.claimantId} claimed · Team{' '}
+                  <span className="font-semibold">{active.scoringTeam}</span> scores
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={dismiss}
+                aria-label="Dismiss"
+                className="shrink-0 text-slate-400 hover:text-slate-200 text-xl leading-none px-2 -mr-1 -mt-1"
               >
-                {active.success ? 'Claim correct' : 'Claim wrong'}
-              </div>
-              <div className="text-lg font-semibold">{set.displayName}</div>
-              <div className="text-sm text-slate-300 mt-1">
-                {byId.get(active.claimantId) ?? active.claimantId} claimed · Team{' '}
-                <span className="font-semibold">{active.scoringTeam}</span> scores
-              </div>
+                ×
+              </button>
             </div>
             <div className="mt-4 grid grid-cols-3 gap-2">
               {set.cards.map((c) => (
@@ -86,6 +114,9 @@ export function ClaimReveal({
                   </span>
                 </div>
               ))}
+            </div>
+            <div className="mt-3 text-center text-[10px] text-slate-500">
+              Click anywhere to dismiss · auto-closes in 6s
             </div>
           </motion.div>
         </motion.div>
