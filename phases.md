@@ -4,8 +4,8 @@ Living document. Update the **Current Status** line and check off todos as work 
 
 ## Current Status
 
-**Phase:** Phase 0 — Scaffold (in progress)
-**Next action:** Fill in real Commands section in CLAUDE.md, then Phase 0 exits and Phase 1 begins.
+**Phase:** Phase 0 — Scaffold (complete) ✓ — exit criteria met: `pnpm install && pnpm typecheck && pnpm test && pnpm lint` all green from a clean clone.
+**Next action:** Begin Phase 1 — define core types, Zod schemas, and `GameVariant` configs in `packages/shared`.
 
 ---
 
@@ -21,7 +21,7 @@ Goal: a working pnpm workspace with empty packages, TS strict, lint, format. No 
 - [x] ESLint + Prettier at root, applied across workspace
 - [x] Vitest configured at root; one trivial passing test per package
 - [x] `pnpm typecheck`, `pnpm test`, `pnpm lint` all green
-- [ ] Fill in real Commands section in [CLAUDE.md](CLAUDE.md)
+- [x] Fill in real Commands section in [CLAUDE.md](CLAUDE.md)
 
 **Exit criteria:** `pnpm install && pnpm test && pnpm typecheck && pnpm lint` passes from a clean clone.
 

@@ -69,16 +69,21 @@ These are the rules that keep the game correct and fair. Breaking any of them is
 
 ## Commands
 
-> Filled in as the workspace is scaffolded. Update this section in the same PR that adds the tooling.
+Run from repo root. All scripts are workspace-aware via `pnpm -r` or operate at root.
 
 ```bash
-pnpm install              # install workspace
-pnpm dev                  # run web + server with HMR
-pnpm test                 # vitest across all packages
-pnpm test:e2e             # playwright (requires dev server running)
-pnpm typecheck            # tsc --noEmit across workspace
-pnpm lint                 # eslint
+pnpm install              # install workspace (uses pnpm 11; node 22+)
+pnpm typecheck            # tsc --noEmit across every package
+pnpm test                 # vitest run across every package
+pnpm lint                 # eslint flat config at root, --max-warnings 0
+pnpm format               # prettier --write across the repo
+pnpm format:check         # prettier --check (CI-style, no writes)
+pnpm build                # pnpm -r build (no-op until packages add build scripts)
 ```
+
+Per-package: `pnpm --filter @literature/<name> <script>` (e.g. `pnpm --filter @literature/engine test`).
+
+Dev servers (added when `apps/server` and `apps/web` get real entry points): `pnpm --filter @literature/server dev`, `pnpm --filter @literature/web dev`.
 
 ## Testing Priorities
 
