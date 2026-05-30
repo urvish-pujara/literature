@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   randomizeSeats,
   seat,
@@ -14,8 +15,16 @@ const SEATS_B = [1, 3, 5];
 export function Lobby() {
   const lobby = useLobbyStore((s) => s.lobby);
   const playerId = useSessionStore((s) => s.playerId);
+  const token = useSessionStore((s) => s.token);
   const showToast = useUiStore((s) => s.showToast);
+  const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (!token) {
+      void navigate('/', { replace: true });
+    }
+  }, [token, navigate]);
 
   if (!lobby) {
     return (
