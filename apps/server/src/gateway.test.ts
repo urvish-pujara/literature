@@ -100,6 +100,23 @@ describe('socket gateway — lobby flow', () => {
     expect(update.players).toHaveLength(1);
   });
 
+  it('broadcasts lobby:update to existing sockets when a new player joins via REST', async () => {
+    const { url, ctx: c } = await start();
+    ctx = c;
+    const host = await createRoom(c);
+    const { socket: hostSock } = await connectClient(url, host.token);
+
+    // host should receive a lobby:update when alice joins via REST
+    const updatePromise = nextEvent<{ players: { id: string; name: string }[] }>(
+      hostSock,
+      'lobby:update',
+    );
+    await joinRoom(c, host.code, 'Alice');
+    const update = await updatePromise;
+    expect(update.players).toHaveLength(2);
+    expect(update.players.some((p) => p.name === 'Alice')).toBe(true);
+  });
+
   it('broadcasts lobby:update when a player picks a seat', async () => {
     const { url, ctx: c } = await start();
     ctx = c;

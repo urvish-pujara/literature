@@ -64,8 +64,21 @@ export function registerRoomRoutes(fastify: FastifyInstance, ctx: AppContext): v
       seatIndex: nextSeat,
     };
 
-    await ctx.store.update(room.id, (r) => ({ ...r, players: [...r.players, newPlayer] }));
+    const updated = await ctx.store.update(room.id, (r) => ({
+      ...r,
+      players: [...r.players, newPlayer],
+    }));
     const token = await signSession({ playerId, roomId: room.id }, ctx.config.jwtSecret);
+    if (updated) {
+      ctx.io.to(updated.id).emit('lobby:update', {
+        roomId: updated.id,
+        code: updated.code,
+        variant: updated.variant,
+        status: updated.status,
+        players: updated.players,
+        hostId: updated.hostId,
+      });
+    }
     return reply.code(200).send({ roomId: room.id, playerId, token });
   });
 
