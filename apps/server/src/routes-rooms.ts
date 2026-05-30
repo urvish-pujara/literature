@@ -5,6 +5,11 @@ import type { AppContext } from './server.js';
 import { generateUniqueCode } from './code-gen.js';
 import { signSession } from './jwt.js';
 
+const JOIN_RATE_LIMIT = {
+  max: 30,
+  timeWindow: '1 minute',
+};
+
 export function registerRoomRoutes(fastify: FastifyInstance, ctx: AppContext): void {
   fastify.post('/rooms', async (req, reply) => {
     const parsed = CreateRoomBodySchema.safeParse(req.body);
@@ -35,7 +40,9 @@ export function registerRoomRoutes(fastify: FastifyInstance, ctx: AppContext): v
     return reply.code(201).send({ roomId, code, playerId: hostId, token });
   });
 
-  fastify.post('/rooms/:code/join', async (req, reply) => {
+  fastify.post('/rooms/:code/join', {
+    config: { rateLimit: JOIN_RATE_LIMIT },
+  }, async (req, reply) => {
     const code = (req.params as { code?: string }).code ?? '';
     const parsed = JoinRoomBodySchema.safeParse(req.body);
     if (!parsed.success) {

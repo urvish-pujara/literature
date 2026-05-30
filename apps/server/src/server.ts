@@ -1,5 +1,6 @@
 import Fastify, { type FastifyInstance } from 'fastify';
 import fastifyCors from '@fastify/cors';
+import fastifyRateLimit from '@fastify/rate-limit';
 import { Server as SocketIOServer } from 'socket.io';
 import type { ServerConfig } from './config.js';
 import { InMemoryRoomStore, type RoomStore } from './store.js';
@@ -19,6 +20,7 @@ export type AppContext = {
 export async function buildServer(config: ServerConfig): Promise<AppContext> {
   const fastify = Fastify({ logger: { level: 'info' } });
   await fastify.register(fastifyCors, { origin: config.corsOrigin, credentials: true });
+  await fastify.register(fastifyRateLimit, { global: false });
 
   fastify.get('/healthz', () => ({ ok: true }));
 

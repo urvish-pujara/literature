@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@fastify/cors": "^10.1.0",
+    "@fastify/rate-limit": "^10.3.0",
     "@literature/engine": "workspace:*",
     "@literature/shared": "workspace:*",
     "fastify": "^5.8.5",

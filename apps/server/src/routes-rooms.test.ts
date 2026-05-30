@@ -121,6 +121,33 @@ describe('POST /rooms/:code/join', () => {
   });
 });
 
+describe('POST /rooms/:code/join — rate limit', () => {
+  it('returns 429 after exceeding the per-IP rate limit', async () => {
+    ctx = await buildServer(baseConfig);
+    const create = await ctx.fastify.inject({
+      method: 'POST',
+      url: '/rooms',
+      payload: { variant: 'classic' },
+    });
+    const { code } = create.json<CreateBody>();
+    // limit is 30/min per IP. fire 31 requests from the same IP.
+    let saw429 = false;
+    for (let i = 0; i < 31; i++) {
+      const res = await ctx.fastify.inject({
+        method: 'POST',
+        url: `/rooms/${code}/join`,
+        payload: { displayName: `P${i}` },
+        remoteAddress: '10.0.0.42',
+      });
+      if (res.statusCode === 429) {
+        saw429 = true;
+        break;
+      }
+    }
+    expect(saw429).toBe(true);
+  });
+});
+
 describe('GET /rooms/:code', () => {
   it('returns lobby metadata for an existing room', async () => {
     ctx = await buildServer(baseConfig);

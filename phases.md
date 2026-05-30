@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 2 — Lobby + Transport (in progress)
-**Next action:** Rate limit on `POST /rooms/:code/join` per IP.
+**Next action:** Full 6-client integration test (join + seat + ready + start).
 
 ---
 
@@ -60,7 +60,7 @@ Goal: 6 clients can join a room, pick seats, ready up. No gameplay yet.
 - [x] `lobby:seat`, `lobby:randomize`, `lobby:start` handlers (Zod-validated)
 - [x] `lobby:update` broadcast per room
 - [x] Room TTL (30 min if game never starts) + cleanup
-- [ ] Rate limit on `POST /rooms/:code/join` per IP
+- [x] Rate limit on `POST /rooms/:code/join` per IP
 - [ ] Integration test: 6 clients join, seat into teams, host starts, server emits initial state
 
 **Exit criteria:** two browser tabs (or two test clients) can create + join + ready up a room. Server rejects 7th joiner, malformed payloads, and unauthenticated sockets.
