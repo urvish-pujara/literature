@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 2 — Lobby + Transport (complete) ✓ — 30 server tests pass; REST + sockets working end-to-end across 6 clients; rate-limit + TTL + auth wired.
-**Next action:** `GameRoomService` — per-room mutex serializes inbound actions, owns the engine.
+**Next action:** Per-recipient emit helper, `game:ask`/`game:claim` handlers, `game:event` broadcast.
 
 ---
 
@@ -71,7 +71,7 @@ Goal: 6 clients can join a room, pick seats, ready up. No gameplay yet.
 
 Goal: gameplay runs end-to-end on the server. Hand privacy enforced.
 
-- [ ] `GameRoomService` — owns one engine instance per room, serializes inbound actions via mutex
+- [x] `GameRoomService` — owns one engine instance per room, serializes inbound actions via mutex
 - [x] `project(state, viewerId) → ClientGameState` — single canonical projector
 - [ ] Per-recipient emit helper; `io.to(roomId).emit('game:state', ...)` is banned (lint rule or wrapper-only)
 - [ ] `game:ask` and `game:claim` socket handlers dispatch to engine
