@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 4 — Frontend Gameplay (in progress)
-**Next action:** `<Table>` with 6 seats on an ellipse, viewer at bottom-center, alternating teams.
+**Next action:** Manual playtest in 6 browser tabs — first visual verification.
 
 ---
 
@@ -93,11 +93,11 @@ Goal: a player can sit at a table, see their hand, ask for a card, see the resul
 - [x] Socket client singleton with auto-reconnect; routes events to stores
 - [x] Landing page: create room / join room with code
 - [x] Lobby screen: seat selection, randomize, ready/start (host only)
-- [ ] `<Table>` with 6 seats on an ellipse, viewer at bottom-center, alternating teams
-- [ ] `<Hand>` with sort (suit → half-suit → sequential, 8s+Jokers clustered)
-- [ ] Responsive: 8 and 9 card hands both render cleanly at common viewport sizes
-- [ ] `<AskModal>`: pick opposing-team target → pick card; "Joker" shown as single option
-- [ ] Server-error toast surface
+- [x] `<Table>` with 6 seats on an ellipse, viewer at bottom-center, alternating teams
+- [x] `<Hand>` with sort (suit → half-suit → sequential, 8s+Jokers clustered)
+- [x] Responsive: 8 and 9 card hands both render cleanly at common viewport sizes
+- [x] `<AskModal>`: pick opposing-team target → pick card; "Joker" shown as single option
+- [x] Server-error toast surface
 - [ ] Manual test: full game runnable across 6 browser tabs
 
 **Exit criteria:** a complete game playable end-to-end in the browser with 6 humans. Ask flow and turn transitions feel correct.
