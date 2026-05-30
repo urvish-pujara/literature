@@ -1,46 +1,35 @@
-import { useFeedStore } from '@literature/domain';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useFeedStore, type FeedEntry } from '@literature/domain';
 import type { ClientPlayerView } from '@literature/shared';
 
 export function ActionFeed({ players }: { players: ClientPlayerView[] }) {
   const entries = useFeedStore((s) => s.entries);
   const byId = new Map(players.map((p) => [p.id, p.name]));
 
-  if (entries.length === 0) return null;
-
   return (
-    <div className="pointer-events-none px-4">
-      <div className="max-w-2xl mx-auto space-y-1">
-        {entries.map((e) => (
-          <FeedRow key={e.id} entry={e} byId={byId} />
-        ))}
+    <div className="pointer-events-none px-4 py-2">
+      <div className="max-w-2xl mx-auto space-y-1.5">
+        <AnimatePresence initial={false}>
+          {entries.map((e) => (
+            <motion.div
+              key={e.id}
+              layout
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6, transition: { duration: 0.6 } }}
+              transition={{ duration: 0.25 }}
+              className="text-xs text-slate-300 bg-slate-900/70 border border-slate-800 rounded px-3 py-1.5 backdrop-blur"
+            >
+              {describe(e, byId)}
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
     </div>
   );
 }
 
-function FeedRow({
-  entry,
-  byId,
-}: {
-  entry: ReturnType<typeof useFeedStore.getState>['entries'][number];
-  byId: Map<string, string>;
-}) {
-  const fade = Math.max(0, (entry.expiresAt - Date.now()) / 15_000);
-  const opacity = Math.min(1, fade);
-  return (
-    <div
-      className="text-xs text-slate-300 bg-slate-900/60 border border-slate-800 rounded px-3 py-1.5 transition"
-      style={{ opacity }}
-    >
-      {describe(entry, byId)}
-    </div>
-  );
-}
-
-function describe(
-  entry: ReturnType<typeof useFeedStore.getState>['entries'][number],
-  byId: Map<string, string>,
-): string {
+function describe(entry: FeedEntry, byId: Map<string, string>): string {
   const name = (id: string): string => byId.get(id) ?? id;
   switch (entry.type) {
     case 'dealt':

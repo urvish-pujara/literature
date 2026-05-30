@@ -5,7 +5,7 @@ Living document. Update the **Current Status** line and check off todos as work 
 ## Current Status
 
 **Phase:** Phase 5 — Claim Builder + Ephemeral Feed (in progress)
-**Next action:** Install framer-motion; refit `<ActionFeed>` with `AnimatePresence` for proper exit animation.
+**Next action:** Build `<ClaimBuilder>` — drag-or-tap assign 6 cards in a set to teammates.
 
 ---
 
@@ -111,7 +111,7 @@ Goal: the remaining rule surface and the core UX device.
 - [ ] `<ClaimBuilder>`: drag-assign 6 cards in a set to teammates; submit disabled until complete
 - [ ] Claim entry point visible at all times (any player, any turn state)
 - [ ] Claim outcome animation: reveal true distribution, score update
-- [ ] `<ActionFeed>` with Framer Motion `AnimatePresence`; entries fade and self-delete at 15s
+- [x] `<ActionFeed>` with Framer Motion `AnimatePresence`; entries fade and self-delete at 15s
 - [ ] On reconnect, client filters server-sent recent events older than 15s before rendering
 - [ ] No history surface anywhere in the UI (verify in code review)
 - [ ] Tests: claim with all correct, one wrong, claim by player with zero cards in set
