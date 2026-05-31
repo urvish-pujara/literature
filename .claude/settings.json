@@ -22,7 +22,27 @@
       "Bash(pnpm --filter @literature/server add -D @types/node@22)",
       "Bash(pnpm lint *)",
       "Bash(pnpm format:check)",
-      "Bash(pnpm format *)"
+      "Bash(pnpm format *)",
+      "Bash(pnpm test *)",
+      "Bash(pnpm --filter @literature/shared test)",
+      "Bash(pnpm --filter @literature/shared add zod@3)",
+      "Bash(pnpm --filter @literature/engine test)",
+      "Bash(pnpm --filter @literature/engine typecheck)",
+      "Bash(pnpm --filter @literature/server add fastify@5 socket.io@4 @fastify/cors@10 jose@5 nanoid@5)",
+      "Bash(pnpm --filter @literature/server add -D tsx@4)",
+      "Bash(pnpm --filter @literature/server test)",
+      "Bash(pnpm --filter @literature/server add -D socket.io-client@4)",
+      "Bash(pnpm --filter @literature/server typecheck)",
+      "Bash(pnpm --filter @literature/server add @fastify/rate-limit@10)",
+      "Bash(pnpm --filter @literature/server test src/leak.test.ts)",
+      "Bash(pnpm --filter @literature/web add react@19 react-dom@19 react-router-dom@7 zustand@5 socket.io-client@4)",
+      "Bash(pnpm --filter @literature/web add -D vite@6 @vitejs/plugin-react@4 @types/react@19 @types/react-dom@19 tailwindcss@4 @tailwindcss/vite@4)",
+      "Bash(pnpm --filter @literature/web build)",
+      "Bash(pnpm --filter @literature/domain add zustand@5)",
+      "Bash(pnpm --filter @literature/domain test)",
+      "Bash(pnpm --filter @literature/domain add socket.io-client@4)",
+      "Bash(pnpm --filter @literature/domain typecheck)",
+      "Bash(pnpm --filter @literature/web add framer-motion@12)"
     ]
   }
 }

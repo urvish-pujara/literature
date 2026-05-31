@@ -24,8 +24,10 @@ async function start(): Promise<{ url: string }> {
     port: 0,
     host: '127.0.0.1',
     jwtSecret: secret,
-    corsOrigin: '*',
+    corsOrigin: ['*'],
     roomTtlMs: 30 * 60 * 1000,
+  redisUrl: null,
+  env: 'test',
   });
   await ctx.fastify.listen({ port: 0, host: '127.0.0.1' });
   const addr = ctx.fastify.server.address() as AddressInfo;

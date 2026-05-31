@@ -6,8 +6,10 @@ const config: ServerConfig = {
   port: 0,
   host: '127.0.0.1',
   jwtSecret: new TextEncoder().encode('test-secret'),
-  corsOrigin: 'http://localhost:5173',
+  corsOrigin: ['http://localhost:5173'],
   roomTtlMs: 30 * 60 * 1000,
+  redisUrl: null,
+  env: 'test',
 };
 
 let ctx: AppContext | null = null;

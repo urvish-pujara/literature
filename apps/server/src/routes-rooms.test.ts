@@ -1,17 +1,20 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import type { AppContext } from './server.js';
+import type { ServerConfig } from './config.js';
 import { buildServer } from './server.js';
 
 type CreateBody = { roomId: string; code: string; playerId: string; token: string };
 type JoinBody = { roomId: string; playerId: string; token: string };
 type GetBody = { variant: string; status: string; players: unknown[] };
 
-const baseConfig = {
+const baseConfig: ServerConfig = {
   port: 0,
   host: '127.0.0.1',
   jwtSecret: new TextEncoder().encode('test-secret'),
-  corsOrigin: '*',
+  corsOrigin: ['*'],
   roomTtlMs: 30 * 60 * 1000,
+  redisUrl: null,
+  env: 'test',
 };
 
 let ctx: AppContext | null = null;
