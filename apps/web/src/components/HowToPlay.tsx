@@ -34,16 +34,16 @@ export function HowToPlay({ open, onClose }: { open: boolean; onClose: () => voi
             exit={{ scale: 0.97, opacity: 0 }}
             transition={{ duration: 0.25 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-2xl rounded-xl border-2 border-amber-900/60 bg-slate-900 shadow-2xl my-8"
+            className="w-full max-w-4xl max-h-[92vh] rounded-xl border-2 border-amber-900/60 shadow-2xl flex flex-col"
             style={{
               background:
                 'linear-gradient(180deg, rgba(14,24,30,0.98) 0%, rgba(8,16,22,0.98) 100%)',
             }}
           >
-            <header className="flex items-center justify-between px-6 py-4 border-b border-amber-900/40">
+            <header className="flex items-center justify-between px-6 py-3 border-b border-amber-900/40 shrink-0">
               <h2
                 id="how-to-play-title"
-                className="text-lg tracking-[0.3em] uppercase text-amber-300"
+                className="text-base tracking-[0.3em] uppercase text-amber-300"
                 style={{ fontFamily: 'Cinzel, serif' }}
               >
                 How to Play
@@ -58,75 +58,74 @@ export function HowToPlay({ open, onClose }: { open: boolean; onClose: () => voi
               </button>
             </header>
 
-            <div className="px-6 py-5 space-y-6 text-sm text-slate-300 leading-relaxed">
+            <div className="px-6 py-4 grid md:grid-cols-2 gap-x-7 gap-y-4 text-[13px] text-slate-300 leading-snug overflow-y-auto">
               <Section title="Goal">
                 Two teams of three. Win more <em>sets</em> than the other team before all sets are
                 claimed. A set is six cards (a half-suit: 2–7 or 9–A of one suit; in Extended, the
                 four 8s plus two Jokers form a ninth set).
               </Section>
 
-              <Section title="On your turn — ask">
-                Pick an opponent and ask for one specific card. The rules say you can only ask if:
-                <ul className="list-disc pl-5 mt-1.5 space-y-1">
-                  <li>The target is on the <strong>opposing team</strong>.</li>
-                  <li>
-                    You <strong>hold at least one card</strong> in the same set as what you're
-                    asking for.
-                  </li>
-                  <li>
-                    You <strong>don't already hold</strong> the specific card.
-                  </li>
-                </ul>
-                <p className="mt-2">
-                  If the target has it → the card moves to you, and you ask again. If they don't →
-                  turn passes to them.
-                </p>
-              </Section>
-
-              <Section title="Jokers (Extended variant)">
-                Two Jokers join the four 8s as one set of six. Ask for them generically as{' '}
-                <span className="text-amber-300">"Joker"</span>:
-                <ul className="list-disc pl-5 mt-1.5 space-y-1">
-                  <li>0 Jokers + at least one 8 → you can ask for a Joker.</li>
-                  <li>1 Joker → you can still ask for another.</li>
-                  <li>2 Jokers → you can't ask (you already hold all of them).</li>
-                </ul>
-                If your target holds one or both Jokers, exactly one moves to you.
-              </Section>
-
               <Section title="Claiming a set">
-                You can claim <strong>at any time</strong> — your turn, your teammate's turn, even
-                during an opponent's turn. To claim, assign each of the 6 cards in a set to a
-                teammate (yourself counts as a teammate).
-                <ul className="list-disc pl-5 mt-1.5 space-y-1">
+                You can claim <strong>at any time</strong> — your turn, a teammate's turn, even an
+                opponent's. Assign each of the 6 cards to a teammate (yourself counts).
+                <ul className="list-disc pl-5 mt-1 space-y-0.5">
                   <li>
                     <span className="text-emerald-300 font-medium">All 6 correct</span> → your team
-                    scores 1 point.
+                    scores 1.
                   </li>
                   <li>
-                    <span className="text-rose-300 font-medium">Any wrong</span> → opposing team
-                    scores 1 point.
+                    <span className="text-rose-300 font-medium">Any wrong</span> → opponents score
+                    1.
                   </li>
                   <li>Either way, all 6 cards leave play.</li>
                 </ul>
               </Section>
 
+              <Section title="On your turn — ask">
+                Pick an opponent and ask for one specific card. You can only ask if:
+                <ul className="list-disc pl-5 mt-1 space-y-0.5">
+                  <li>
+                    The target is on the <strong>opposing team</strong>.
+                  </li>
+                  <li>
+                    You <strong>hold at least one card</strong> in the same set.
+                  </li>
+                  <li>
+                    You <strong>don't already hold</strong> that specific card.
+                  </li>
+                </ul>
+                <p className="mt-1.5">
+                  If they have it → it moves to you and you ask again. If not → turn passes to them.
+                </p>
+              </Section>
+
               <Section title="The memory part">
-                Action notifications appear at the right and{' '}
+                Action notifications appear in the Feed and{' '}
                 <strong>fade away after 15 seconds</strong>. There's no permanent history. Listen
                 carefully — every ask is information you can use.
               </Section>
 
+              <Section title="Jokers (Extended)">
+                Two Jokers join the four 8s as one six-card set. Ask for them generically as{' '}
+                <span className="text-amber-300">"Joker"</span>:
+                <ul className="list-disc pl-5 mt-1 space-y-0.5">
+                  <li>0 Jokers + at least one 8 → can ask.</li>
+                  <li>1 Joker → can still ask for another.</li>
+                  <li>2 Jokers → can't ask (you have all of them).</li>
+                </ul>
+                If your target holds one or both, exactly one moves to you.
+              </Section>
+
               <Section title="Controls">
-                <ul className="list-disc pl-5 mt-1.5 space-y-1">
+                <ul className="list-disc pl-5 mt-1 space-y-0.5">
                   <li>
-                    <strong>Ask</strong> tab in the right panel — pick a target, pick a card.
+                    <strong>Ask</strong> tab — pick a target, pick a card.
                   </li>
                   <li>
-                    <strong>Claim</strong> tab — pick a set, assign each card to a teammate, submit.
+                    <strong>Claim</strong> tab — pick a set, assign each card, submit.
                   </li>
                   <li>
-                    <strong>Feed</strong> tab — the live action log (15-second window).
+                    <strong>Feed</strong> tab — live action log (15s window).
                   </li>
                   <li>
                     Press <kbd className="rounded bg-slate-800 px-1.5 py-0.5 text-xs">Esc</kbd> to
@@ -136,7 +135,7 @@ export function HowToPlay({ open, onClose }: { open: boolean; onClose: () => voi
               </Section>
             </div>
 
-            <footer className="px-6 py-4 border-t border-amber-900/40 flex justify-end">
+            <footer className="px-6 py-3 border-t border-amber-900/40 flex justify-end shrink-0">
               <button
                 type="button"
                 onClick={onClose}
