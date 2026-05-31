@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: literature-server
+    runtime: node
+    region: oregon
+    plan: free
+    rootDir: .
+    buildCommand: corepack enable && corepack prepare pnpm@11.1.3 --activate && pnpm install --frozen-lockfile --filter @literature/server...
+    startCommand: pnpm --filter @literature/server exec tsx src/index.ts
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: JWT_SECRET
+        generateValue: true
+      # Update CORS_ORIGIN to your literature-web URL after the static site deploys.
+      - key: CORS_ORIGIN
+        sync: false
+
+  - type: web
+    name: literature-web
+    runtime: static
+    rootDir: .
+    buildCommand: corepack enable && corepack prepare pnpm@11.1.3 --activate && pnpm install --frozen-lockfile && pnpm --filter @literature/web build
+    staticPublishPath: apps/web/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      # Update both URLs to your literature-server URL after it deploys.
+      - key: VITE_API_BASE
+        sync: false
+      - key: VITE_SOCKET_URL
+        sync: false

@@ -6,8 +6,7 @@ import { Lobby } from './pages/Lobby.js';
 import { Play } from './pages/Play.js';
 import { ToastSurface } from './components/ToastSurface.js';
 import { ConnectionBanner } from './components/ConnectionBanner.js';
-
-const SOCKET_URL = '/';
+import { SOCKET_URL } from './env.js';
 
 function LobbyStatusRouter() {
   const status = useLobbyStore((s) => s.lobby?.status);

@@ -7,10 +7,9 @@ import {
   useSessionStore,
   useUiStore,
 } from '@literature/domain';
+import { SOCKET_URL } from '../env.js';
 
 type Mode = 'pick' | 'create' | 'join';
-
-const SOCKET_URL = '/';
 
 export function Landing() {
   const navigate = useNavigate();
