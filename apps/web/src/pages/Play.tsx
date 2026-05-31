@@ -15,6 +15,7 @@ import { ActionPanel } from '../components/ActionPanel.js';
 import { ClaimReveal } from '../components/ClaimReveal.js';
 import { LiveAnnouncer } from '../components/LiveAnnouncer.js';
 import { GameEndOverlay } from '../components/GameEndOverlay.js';
+import { HowToPlay } from '../components/HowToPlay.js';
 
 export function Play() {
   const state = useGameStore((s) => s.state);
@@ -27,6 +28,7 @@ export function Play() {
   const navigate = useNavigate();
   const prune = useFeedStore((s) => s.prune);
   const [, setTick] = useState(0);
+  const [howToOpen, setHowToOpen] = useState(false);
 
   useEffect(() => {
     const handle = setInterval(() => {
@@ -84,6 +86,15 @@ export function Play() {
           </div>
           <button
             type="button"
+            onClick={() => setHowToOpen(true)}
+            aria-label="How to play"
+            title="How to play"
+            className="w-7 h-7 rounded-full border border-amber-700/40 text-amber-300/80 hover:text-amber-200 hover:border-amber-500/60 text-xs font-semibold"
+          >
+            ?
+          </button>
+          <button
+            type="button"
             onClick={() => {
               leaveRoom();
               void navigate('/', { replace: true });
@@ -130,6 +141,7 @@ export function Play() {
       <ClaimReveal players={state.players} variantName={state.variant} />
       <LiveAnnouncer players={state.players} viewerId={playerId} />
       {state.phase === 'ended' && <GameEndOverlay score={state.score} />}
+      <HowToPlay open={howToOpen} onClose={() => setHowToOpen(false)} />
     </main>
   );
 }

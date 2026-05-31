@@ -8,39 +8,56 @@ import {
   useUiStore,
 } from '@literature/domain';
 import { SOCKET_URL } from '../env.js';
+import { HowToPlay } from '../components/HowToPlay.js';
 
 type Mode = 'pick' | 'create' | 'join';
 
 export function Landing() {
   const navigate = useNavigate();
   const [mode, setMode] = useState<Mode>('pick');
+  const [howToOpen, setHowToOpen] = useState(false);
 
   if (mode === 'pick') {
     return (
-      <main className="min-h-screen flex items-center justify-center p-6">
-        <div className="w-full max-w-md text-center space-y-8">
-          <div>
-            <h1 className="text-5xl font-bold">Literature</h1>
-            <p className="mt-3 text-slate-400">3 vs 3. Six players. One deck.</p>
+      <>
+        <main className="min-h-screen flex items-center justify-center p-6">
+          <div className="w-full max-w-md text-center space-y-8">
+            <div>
+              <h1
+                className="text-5xl text-amber-300 tracking-[0.25em] uppercase"
+                style={{ fontFamily: 'Cinzel, serif' }}
+              >
+                Literature
+              </h1>
+              <p className="mt-3 text-slate-400">3 vs 3. Six players. One deck.</p>
+            </div>
+            <div className="space-y-3">
+              <button
+                type="button"
+                onClick={() => setMode('create')}
+                className="w-full rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold py-3"
+              >
+                Create a room
+              </button>
+              <button
+                type="button"
+                onClick={() => setMode('join')}
+                className="w-full rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 font-semibold py-3"
+              >
+                Join with code
+              </button>
+              <button
+                type="button"
+                onClick={() => setHowToOpen(true)}
+                className="w-full text-sm text-amber-300/80 hover:text-amber-200 underline-offset-4 hover:underline pt-2"
+              >
+                How to play
+              </button>
+            </div>
           </div>
-          <div className="space-y-3">
-            <button
-              type="button"
-              onClick={() => setMode('create')}
-              className="w-full rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold py-3"
-            >
-              Create a room
-            </button>
-            <button
-              type="button"
-              onClick={() => setMode('join')}
-              className="w-full rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 font-semibold py-3"
-            >
-              Join with code
-            </button>
-          </div>
-        </div>
-      </main>
+        </main>
+        <HowToPlay open={howToOpen} onClose={() => setHowToOpen(false)} />
+      </>
     );
   }
 
