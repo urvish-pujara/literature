@@ -16,6 +16,8 @@ import { ClaimReveal } from '../components/ClaimReveal.js';
 import { LiveAnnouncer } from '../components/LiveAnnouncer.js';
 import { GameEndOverlay } from '../components/GameEndOverlay.js';
 import { HowToPlay } from '../components/HowToPlay.js';
+import { SoundToggle } from '../components/SoundToggle.js';
+import { useGameSounds } from '../hooks/useGameSounds.js';
 
 export function Play() {
   const state = useGameStore((s) => s.state);
@@ -29,6 +31,8 @@ export function Play() {
   const prune = useFeedStore((s) => s.prune);
   const [, setTick] = useState(0);
   const [howToOpen, setHowToOpen] = useState(false);
+
+  useGameSounds(playerId);
 
   useEffect(() => {
     const handle = setInterval(() => {
@@ -84,6 +88,7 @@ export function Play() {
               <span className="text-slate-500">Waiting…</span>
             )}
           </div>
+          <SoundToggle />
           <button
             type="button"
             onClick={() => setHowToOpen(true)}

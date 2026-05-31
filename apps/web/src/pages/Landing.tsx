@@ -9,6 +9,7 @@ import {
 } from '@literature/domain';
 import { SOCKET_URL } from '../env.js';
 import { HowToPlay } from '../components/HowToPlay.js';
+import { unlock as unlockAudio } from '../lib/audio.js';
 
 type Mode = 'pick' | 'create' | 'join';
 
@@ -34,14 +35,20 @@ export function Landing() {
             <div className="space-y-3">
               <button
                 type="button"
-                onClick={() => setMode('create')}
+                onClick={() => {
+                  unlockAudio();
+                  setMode('create');
+                }}
                 className="w-full rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold py-3"
               >
                 Create a room
               </button>
               <button
                 type="button"
-                onClick={() => setMode('join')}
+                onClick={() => {
+                  unlockAudio();
+                  setMode('join');
+                }}
                 className="w-full rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 font-semibold py-3"
               >
                 Join with code
